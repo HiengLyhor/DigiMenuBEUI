@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35828.75 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyDigiMenu", "MyDigiMenu\MyDigiMenu.csproj", "{D9DBED6B-C81C-4FA1-80F0-9DD851E19003}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D9DBED6B-C81C-4FA1-80F0-9DD851E19003}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9DBED6B-C81C-4FA1-80F0-9DD851E19003}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9DBED6B-C81C-4FA1-80F0-9DD851E19003}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9DBED6B-C81C-4FA1-80F0-9DD851E19003}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9499C800-10F0-442D-A26A-6DFA51F5283D}
+	EndGlobalSection
+EndGlobal

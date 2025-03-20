@@ -1,0 +1,58 @@
+﻿@model MyDigiMenu.Models.LoginModel
+@{
+    Layout = null;
+    ViewBag.Title = "E-Menu Admin";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link rel="icon" type="image/png" href="~/Content/logo-color.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/Content/LoginStyle.css">
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-container">
+            <div class="login-box">
+                <img src="~/Content/logo-no-background.png" alt="E-Menu Logo" class="logo">
+                <h2>E-Menu Backend</h2>
+                @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { id = "login-form" }))
+                {
+                    <div class="textbox">
+                        @Html.TextBoxFor(m => m.Username, new { id = "username", placeholder = "Username", @class = "form-control" })
+                    </div>
+                    <div class="textbox">
+                        @Html.PasswordFor(m => m.Password, new { id = "password", placeholder = "Password", @class = "form-control" })
+                        <button type="button" class="toggle-password" id="toggle-password">👁️</button>
+                    </div>
+
+                    <div id="notification" class="notification" style="">
+                        <span id="notification-message"></span>
+                    </div>
+
+                    <div class="button-container">
+                        <button type="submit" class="login-btn" id="login-btn">Login</button>
+                    </div>
+                    <div class="forgot-password">
+                        <a href="@Url.Action("ForgotPassword", "Account")" id="forgot-password">Forgot Password?</a>
+                    </div>
+                }
+                <div id="loading-spinner" class="loading-spinner" style="display: none;">
+                    <div class="spinner">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/Scripts/LoginScript.js"></script>
+</body>
+</html>

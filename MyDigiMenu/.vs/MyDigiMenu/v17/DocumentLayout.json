@@ -1,0 +1,155 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Implementation\\MyDigiMenu\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D9DBED6B-C81C-4FA1-80F0-9DD851E19003}|MyDigiMenu\\MyDigiMenu.csproj|d:\\implementation\\mydigimenu\\mydigimenu\\controllers\\errorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D9DBED6B-C81C-4FA1-80F0-9DD851E19003}|MyDigiMenu\\MyDigiMenu.csproj|solutionrelative:mydigimenu\\controllers\\errorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D9DBED6B-C81C-4FA1-80F0-9DD851E19003}|MyDigiMenu\\MyDigiMenu.csproj|d:\\implementation\\mydigimenu\\mydigimenu\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D9DBED6B-C81C-4FA1-80F0-9DD851E19003}|MyDigiMenu\\MyDigiMenu.csproj|solutionrelative:mydigimenu\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D9DBED6B-C81C-4FA1-80F0-9DD851E19003}|MyDigiMenu\\MyDigiMenu.csproj|d:\\implementation\\mydigimenu\\mydigimenu\\attribute\\myauthorizeattribute.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D9DBED6B-C81C-4FA1-80F0-9DD851E19003}|MyDigiMenu\\MyDigiMenu.csproj|solutionrelative:mydigimenu\\attribute\\myauthorizeattribute.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D9DBED6B-C81C-4FA1-80F0-9DD851E19003}|MyDigiMenu\\MyDigiMenu.csproj|D:\\Implementation\\MyDigiMenu\\mydigimenu\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D9DBED6B-C81C-4FA1-80F0-9DD851E19003}|MyDigiMenu\\MyDigiMenu.csproj|solutionrelative:mydigimenu\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D9DBED6B-C81C-4FA1-80F0-9DD851E19003}|MyDigiMenu\\MyDigiMenu.csproj|D:\\Implementation\\MyDigiMenu\\mydigimenu\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D9DBED6B-C81C-4FA1-80F0-9DD851E19003}|MyDigiMenu\\MyDigiMenu.csproj|solutionrelative:mydigimenu\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D9DBED6B-C81C-4FA1-80F0-9DD851E19003}|MyDigiMenu\\MyDigiMenu.csproj|D:\\Implementation\\MyDigiMenu\\mydigimenu\\scripts\\loginscript.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{D9DBED6B-C81C-4FA1-80F0-9DD851E19003}|MyDigiMenu\\MyDigiMenu.csproj|solutionrelative:mydigimenu\\scripts\\loginscript.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D9DBED6B-C81C-4FA1-80F0-9DD851E19003}|MyDigiMenu\\MyDigiMenu.csproj|D:\\Implementation\\MyDigiMenu\\mydigimenu\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{D9DBED6B-C81C-4FA1-80F0-9DD851E19003}|MyDigiMenu\\MyDigiMenu.csproj|solutionrelative:mydigimenu\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D9DBED6B-C81C-4FA1-80F0-9DD851E19003}|MyDigiMenu\\MyDigiMenu.csproj|D:\\Implementation\\MyDigiMenu\\mydigimenu\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D9DBED6B-C81C-4FA1-80F0-9DD851E19003}|MyDigiMenu\\MyDigiMenu.csproj|solutionrelative:mydigimenu\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ErrorController.cs",
+              "DocumentMoniker": "D:\\Implementation\\MyDigiMenu\\MyDigiMenu\\Controllers\\ErrorController.cs",
+              "RelativeDocumentMoniker": "MyDigiMenu\\Controllers\\ErrorController.cs",
+              "ToolTip": "D:\\Implementation\\MyDigiMenu\\MyDigiMenu\\Controllers\\ErrorController.cs",
+              "RelativeToolTip": "MyDigiMenu\\Controllers\\ErrorController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-20T09:21:43.893Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MyAuthorizeAttribute.cs",
+              "DocumentMoniker": "D:\\Implementation\\MyDigiMenu\\MyDigiMenu\\Attribute\\MyAuthorizeAttribute.cs",
+              "RelativeDocumentMoniker": "MyDigiMenu\\Attribute\\MyAuthorizeAttribute.cs",
+              "ToolTip": "D:\\Implementation\\MyDigiMenu\\MyDigiMenu\\Attribute\\MyAuthorizeAttribute.cs",
+              "RelativeToolTip": "MyDigiMenu\\Attribute\\MyAuthorizeAttribute.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAABMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-20T09:28:15.087Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Web.config",
+              "DocumentMoniker": "D:\\Implementation\\MyDigiMenu\\MyDigiMenu\\Web.config",
+              "RelativeDocumentMoniker": "MyDigiMenu\\Web.config",
+              "ToolTip": "D:\\Implementation\\MyDigiMenu\\MyDigiMenu\\Web.config",
+              "RelativeToolTip": "MyDigiMenu\\Web.config",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2025-03-20T08:03:34.676Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\Implementation\\MyDigiMenu\\MyDigiMenu\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "MyDigiMenu\\Views\\Home\\Index.cshtml",
+              "ToolTip": "D:\\Implementation\\MyDigiMenu\\MyDigiMenu\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "MyDigiMenu\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-20T07:42:10.099Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "LoginScript.js",
+              "DocumentMoniker": "D:\\Implementation\\MyDigiMenu\\MyDigiMenu\\Scripts\\LoginScript.js",
+              "RelativeDocumentMoniker": "MyDigiMenu\\Scripts\\LoginScript.js",
+              "ToolTip": "D:\\Implementation\\MyDigiMenu\\MyDigiMenu\\Scripts\\LoginScript.js",
+              "RelativeToolTip": "MyDigiMenu\\Scripts\\LoginScript.js",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAwAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-03-20T07:40:54.447Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "D:\\Implementation\\MyDigiMenu\\MyDigiMenu\\Views\\Account\\Login.cshtml",
+              "RelativeDocumentMoniker": "MyDigiMenu\\Views\\Account\\Login.cshtml",
+              "ToolTip": "D:\\Implementation\\MyDigiMenu\\MyDigiMenu\\Views\\Account\\Login.cshtml",
+              "RelativeToolTip": "MyDigiMenu\\Views\\Account\\Login.cshtml",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAACMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-20T07:40:42.202Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "D:\\Implementation\\MyDigiMenu\\MyDigiMenu\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "MyDigiMenu\\Controllers\\HomeController.cs",
+              "ToolTip": "D:\\Implementation\\MyDigiMenu\\MyDigiMenu\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "MyDigiMenu\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-20T07:38:43.337Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "D:\\Implementation\\MyDigiMenu\\MyDigiMenu\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "MyDigiMenu\\Controllers\\AccountController.cs",
+              "ToolTip": "D:\\Implementation\\MyDigiMenu\\MyDigiMenu\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "MyDigiMenu\\Controllers\\AccountController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAABNAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-20T07:24:08.718Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
