@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 
 namespace MyDigiMenu.Models
 {
@@ -23,6 +24,8 @@ namespace MyDigiMenu.Models
 			{
 				string baseUrl = ConfigurationManager.AppSettings["BaseApiUrl"];
 
+                loginUser.Password = Encryption.Encrypt(loginUser.Password);
+
                 var jsonContent = JsonConvert.SerializeObject(loginUser);
 
                 var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
@@ -33,6 +36,8 @@ namespace MyDigiMenu.Models
                 var responseBody = await response.Content.ReadAsStringAsync();
 
                 var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseBody);
+
+				loginResponse.Token = Encryption.Decrypt(loginResponse.Token);
 
                 return loginResponse;
 

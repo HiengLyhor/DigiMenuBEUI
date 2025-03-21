@@ -27,6 +27,8 @@ namespace MyDigiMenu.Controllers
         [HttpPost]
         public async Task<JsonResult> Login(LoginModel login)
         {
+
+            
             if (Session["User"] != null) return Json(new { success = true });
 
             if (string.IsNullOrEmpty(login.Username) || string.IsNullOrEmpty(login.Password))
@@ -51,7 +53,7 @@ namespace MyDigiMenu.Controllers
                 1,
                 login.Username,
                 DateTime.Now,
-                DateTime.Now.AddMinutes(5),
+                DateTime.Now.AddMinutes(9),
                 false, //pass here true, if you want to implement remember me functionality
                 userData);
 
