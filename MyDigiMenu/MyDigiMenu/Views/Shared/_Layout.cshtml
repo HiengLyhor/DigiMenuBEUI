@@ -1,0 +1,168 @@
+﻿
+@{
+    ViewBag.Title = "_Layout";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-Menu Admin</title>
+    <link rel="icon" type="image/png" href="~/Content/logo-color.png">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* Custom styles for the layout */
+        body {
+            display: flex;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* Sidebar styling */
+        .sidebar {
+            width: 250px;
+            background-color: #343a40; /* Dark background */
+            color: #ffffff; /* White text */
+            padding: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+            .sidebar.collapsed {
+                transform: translateX(-250px); /* Hide sidebar */
+            }
+
+            .sidebar .nav-link {
+                color: #ffffff; /* White text */
+                padding: 0.5rem 1rem;
+                margin: 0.25rem 0;
+                border-radius: 4px;
+                transition: background-color 0.3s ease;
+            }
+
+                .sidebar .nav-link:hover {
+                    background-color: #495057; /* Slightly lighter background on hover */
+                }
+
+        /* Top navbar styling */
+        .top-navbar {
+            background-color: #ffffff; /* White background */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 0.5rem 1rem;
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+            .top-navbar .navbar-brand {
+                font-weight: bold;
+                color: #343a40; /* Dark text */
+                display: flex;
+                align-items: center;
+            }
+
+                .top-navbar .navbar-brand img {
+                    margin-right: 10px;
+                }
+
+            .top-navbar .sidebar-toggle {
+                background: none;
+                border: none;
+                font-size: 1.5rem;
+                cursor: pointer;
+                margin-right: 1rem;
+            }
+
+            .top-navbar .dropdown-toggle {
+                color: #343a40; /* Dark text */
+            }
+
+            .top-navbar .dropdown-menu {
+                right: 0;
+                left: auto;
+            }
+
+        /* Main content area */
+        .main-content {
+            flex: 1;
+            padding: 1rem;
+            background-color: #f8f9fa; /* Light background */
+            transition: margin-left 0.3s ease;
+        }
+
+            .main-content.expanded {
+                margin-left: 0; /* Adjust when sidebar is collapsed */
+            }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" href="~/Home/Index">
+                    <i class="fas fa-home"></i> <!-- Home icon -->
+                    &ensp;Home
+                </a>
+            </li>
+            @if (Session["Super"].ToString() == "Y")
+            {
+                <li class="nav-item">
+                    <a class="nav-link" href="~/User/AllUsers">
+                        <i class="fas fa-users"></i>
+                        &ensp;Users
+                    </a>
+                </li>
+            }
+            <li class="nav-item">
+                <a class="nav-link" href="~/MenuManagement/Index">
+                    <i class="fas fa-box"></i>
+                    &ensp;Products
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="~/Home/Contact">
+                    <i class="fa fa-phone-square"></i>
+                    &ensp;Contact Us
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main content and top navbar -->
+    <div style="flex: 1; display: flex; flex-direction: column;">
+        <!-- Top navbar -->
+        <nav class="top-navbar navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand" href="#">
+                <img src="~/Content/logo-no-background.png" alt="Logo" width="100" height="30">
+                 Admin Panel
+            </a>
+
+            <!-- User details and logout on the right -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="~/Content/logo-color.png" alt="User Avatar" width="30" height="30" class="rounded-circle">
+                        &ensp;@Session["User"]
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Profile</a>
+                        <a class="dropdown-item" href="#">Settings</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="~/Account/SignOut">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main content -->
+        <div class="main-content" id="mainContent">
+            @RenderBody()
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

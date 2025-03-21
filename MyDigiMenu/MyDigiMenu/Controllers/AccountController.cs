@@ -64,7 +64,7 @@ namespace MyDigiMenu.Controllers
             else
             {
                 // Return failure response
-                return Json(new { success = false, message = "Invalid username or password." });
+                return Json(new { success = false, message = loginResponse.Message });
             }
 
         }
