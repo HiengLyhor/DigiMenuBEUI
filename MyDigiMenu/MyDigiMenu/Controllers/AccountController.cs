@@ -41,12 +41,15 @@ namespace MyDigiMenu.Controllers
             // Login success & not lock
             if (loginResponse.Code == 200 && loginResponse.IsLock != "Y")
             {
+
                 Session["User"] = loginResponse.Username;
                 Session["Token"] = loginResponse.Token;
                 Session["CreateDate"] = loginResponse.CreateDate;
                 Session["ExpireDate"] = loginResponse.ExpDate;
                 Session["Super"] = loginResponse.IsSpecial; // Y & N
                 Session["Lock"] = loginResponse.IsLock; // Y & N
+                Session["Venue"] = loginResponse.VenueName;
+                Session["ShopName"] = loginResponse.ShopName;
 
                 string userData = JsonConvert.SerializeObject(login);
                 FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(

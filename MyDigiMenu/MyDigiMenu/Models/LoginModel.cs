@@ -69,5 +69,8 @@ namespace MyDigiMenu.Models
 
 		public string Token { get; set; }
 
+		public string VenueName { get; set; }
+
+		public string ShopName { get; set; }
 	}
 }
