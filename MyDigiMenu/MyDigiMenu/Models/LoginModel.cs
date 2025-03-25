@@ -1,12 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Configuration;
-using System.Net;
 using System.Net.Http;
-using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.UI.WebControls;
 
 namespace MyDigiMenu.Models
 {
@@ -22,14 +18,13 @@ namespace MyDigiMenu.Models
 
 			try
 			{
-				string baseUrl = ConfigurationManager.AppSettings["BaseApiUrl"];
 
                 loginUser.Password = Encryption.Encrypt(loginUser.Password);
 
                 var jsonContent = JsonConvert.SerializeObject(loginUser);
 
                 var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync(baseUrl + "user/login", content);
+                var response = await client.PostAsync(GeneralAction.GetBaseAPIUrl() + "user/login", content);
 
                 response.EnsureSuccessStatusCode();
 

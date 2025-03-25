@@ -20,8 +20,9 @@ namespace MyDigiMenu.Controllers
         [HttpGet]
         public ActionResult Login()
         {
+            LoginModel login = new LoginModel();
             if (Session["User"] != null) return RedirectToAction("Index", "Home");
-            return View(new LoginModel());
+            return View(login);
         }
 
         [HttpPost]

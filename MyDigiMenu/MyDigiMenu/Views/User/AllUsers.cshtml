@@ -1,0 +1,165 @@
+﻿@model MyDigiMenu.Models.AllUserResponse
+
+@{
+    ViewBag.Title = "AllUsers";
+}
+
+<style>
+    .form-inline {
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+    }
+
+    .form-group {
+        margin-right: 10px;
+    }
+
+    .form-group label {
+        margin-right: 5px;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .table th, .table td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+    }
+
+    .table th {
+        background-color: #f2f2f2;
+    }
+
+    .table tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .table tr:hover {
+        background-color: #ddd;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .error-notification {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #e74c3c;
+        color: white;
+        padding: 15px 30px;
+        border-radius: 5px;
+        font-size: 16px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.3s ease, top 0.3s ease;
+    }
+
+    .error-notification.show {
+        display: block;
+        opacity: 1;
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .error-notification .close-btn {
+        position: absolute;
+        top: 5px;
+        right: 10px;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+</style>
+
+<h2>All Users</h2>
+
+<form action="@Url.Action("AllUsers", "User")" method="get" class="form-inline">
+    <div class="form-group">
+        <label for="filterBy">Filter By:</label>
+        <input type="text" name="filterBy" id="filterBy" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="asc">Ascending:</label>
+        <input type="checkbox" name="asc" id="asc" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form>
+
+@if (Model.Code != 200)
+{
+    <div class="error-notification show" id="errorNotification">
+        @Model.Message
+        <button class="close-btn" onclick="closeNotification()">×</button>
+    </div>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Own Shop</th>
+                <th>Create Date</th>
+                <th>Exp Date</th>
+                <th>Is Special</th>
+                <th>Is Lock</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.UserLogins)
+            {
+                <tr>
+                    <td>@user.Username</td>
+                    <td>@user.OwnShop</td>
+                    <td>@user.CreateDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    <td>@user.ExpDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    <td>@user.IsSpecial</td>
+                    <td>@user.IsLock</td>
+                    <td>
+                        <form action="@Url.Action("ViewUser", "User")" method="get">
+                            <input type="hidden" name="username" value="@user.Username" />
+                            <button type="submit" class="btn btn-primary">View</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<script>
+    function closeNotification() {
+        var notification = document.getElementById('errorNotification');
+        notification.style.animation = 'fadeOut 0.5s ease-in-out';
+        setTimeout(function () {
+            notification.style.display = 'none';
+        }, 500);
+    }
+</script>

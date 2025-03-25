@@ -14,31 +14,36 @@ namespace MyDigiMenu.Models
         {
             using (Aes aesAlg = Aes.Create())
             {
-                aesAlg.Key = Encoding.UTF8.GetBytes(key);
-                aesAlg.IV = new byte[16]; // 16-byte IV for AES
-                new Random().NextBytes(aesAlg.IV);  // Generate random IV for each encryption
+                // Key setup (UTF-8, like Java)
+                byte[] keyBytes = Encoding.UTF8.GetBytes(key);
+                aesAlg.Key = keyBytes;
                 aesAlg.Mode = CipherMode.CBC;
                 aesAlg.Padding = PaddingMode.PKCS7;
 
-                ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
+                // Generate secure IV (16 bytes, matching Java's SecureRandom)
+                byte[] iv = new byte[16];
+                using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
+                {
+                    rng.GetBytes(iv);
+                }
+                aesAlg.IV = iv;
 
+                // Encrypt using CryptoStream (supports large data)
                 using (MemoryStream msEncrypt = new MemoryStream())
                 {
-                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, aesAlg.CreateEncryptor(), CryptoStreamMode.Write))
                     {
-                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
-                        {
-                            swEncrypt.Write(plainText);
-                        }
+                        byte[] plainBytes = Encoding.UTF8.GetBytes(plainText);
+                        csEncrypt.Write(plainBytes, 0, plainBytes.Length);
+                        csEncrypt.FlushFinalBlock(); // Ensure padding is applied
                     }
 
-                    byte[] iv = aesAlg.IV;
-                    byte[] encrypted = msEncrypt.ToArray();
+                    byte[] encryptedBytes = msEncrypt.ToArray();
 
-                    // Combine IV and encrypted text to send both to the other side
-                    byte[] combined = new byte[iv.Length + encrypted.Length];
-                    Array.Copy(iv, 0, combined, 0, iv.Length);
-                    Array.Copy(encrypted, 0, combined, iv.Length, encrypted.Length);
+                    // Combine IV + ciphertext (same as Java)
+                    byte[] combined = new byte[iv.Length + encryptedBytes.Length];
+                    Buffer.BlockCopy(iv, 0, combined, 0, iv.Length);
+                    Buffer.BlockCopy(encryptedBytes, 0, combined, iv.Length, encryptedBytes.Length);
 
                     return Convert.ToBase64String(combined);
                 }
@@ -49,32 +54,26 @@ namespace MyDigiMenu.Models
         {
             using (Aes aesAlg = Aes.Create())
             {
-                byte[] combined = Convert.FromBase64String(cipherText);
-
-                // Extract the IV from the combined data
-                byte[] iv = new byte[16];
-                Array.Copy(combined, 0, iv, 0, iv.Length);
-
-                // Extract the actual encrypted message
-                byte[] encryptedMessage = new byte[combined.Length - iv.Length];
-                Array.Copy(combined, iv.Length, encryptedMessage, 0, encryptedMessage.Length);
-
-                aesAlg.Key = Encoding.UTF8.GetBytes(key);
-                aesAlg.IV = iv;
+                // Key setup (UTF-8, like Java)
+                byte[] keyBytes = Encoding.UTF8.GetBytes(key);
+                aesAlg.Key = keyBytes;
                 aesAlg.Mode = CipherMode.CBC;
                 aesAlg.Padding = PaddingMode.PKCS7;
 
-                ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+                // Decode Base64 and split IV + ciphertext
+                byte[] combined = Convert.FromBase64String(cipherText);
+                byte[] iv = new byte[16];
+                byte[] encryptedBytes = new byte[combined.Length - iv.Length];
+                Buffer.BlockCopy(combined, 0, iv, 0, iv.Length);
+                Buffer.BlockCopy(combined, iv.Length, encryptedBytes, 0, encryptedBytes.Length);
+                aesAlg.IV = iv;
 
-                using (MemoryStream msDecrypt = new MemoryStream(encryptedMessage))
+                // Decrypt using CryptoStream (supports large data)
+                using (MemoryStream msDecrypt = new MemoryStream(encryptedBytes))
+                using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, aesAlg.CreateDecryptor(), CryptoStreamMode.Read))
+                using (StreamReader srDecrypt = new StreamReader(csDecrypt))
                 {
-                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
-                    {
-                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
-                        {
-                            return srDecrypt.ReadToEnd();
-                        }
-                    }
+                    return srDecrypt.ReadToEnd(); // Handles large text (e.g., JWTs)
                 }
             }
         }

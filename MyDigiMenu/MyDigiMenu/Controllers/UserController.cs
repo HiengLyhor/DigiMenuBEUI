@@ -1,4 +1,5 @@
 ﻿using MyDigiMenu.Attribute;
+using MyDigiMenu.Models;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -7,20 +8,25 @@ namespace MyDigiMenu.Controllers
     public class UserController : Controller
     {
         [MyAuthorize]
-        public ActionResult AllUsers()
+        [HttpGet]
+        public async Task<ActionResult> AllUsers(string filterBy, string asc)
         {
             if (Session["Super"].ToString() == "Y")
             {
-                return View();
+                AllUserResponse response = await new User().GetAllUsers(filterBy, asc, Session["Token"].ToString(), Session["User"].ToString());
+
+                return View(response);
             }
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpPost]
         [MyAuthorize]
-        public async Task<JsonResult> AllUsers(string sortBy, bool asc)
+        public ActionResult ViewUser(string username)
         {
-            return null;
+            // Implement logic to view user details based on the username
+            // For example, you can fetch the user details from the database or API
+            return View();
         }
+
     }
 }

@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -41,6 +44,50 @@ namespace MyDigiMenu.Models
                     Console.WriteLine($"Error sending message: {ex.Message}");
                 }
             }
+        }
+
+        public static async Task<T> GetAsync<T>(string url, string jwtToken)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+                var response = await client.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonString = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<T>(jsonString);
+                }
+                else
+                {
+                    throw new Exception($"Error: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+            }
+        }
+
+        public static async Task<T> PostAsync<T>(string url, object data, string jwtToken)
+        {
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+                var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+                var response = await client.PostAsync(url, content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonString = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<T>(jsonString);
+                }
+                else
+                {
+                    throw new Exception($"Error: {response.StatusCode}, {response.ReasonPhrase}");
+                }
+            }
+        }
+
+        public static string GetBaseAPIUrl()
+        {
+            return ConfigurationManager.AppSettings["BaseApiUrl"];
         }
     }
 }
