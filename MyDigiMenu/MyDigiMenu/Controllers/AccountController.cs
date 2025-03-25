@@ -39,8 +39,13 @@ namespace MyDigiMenu.Controllers
             LoginResponse loginResponse = await login.loginUserToAPI(login);
 
             // Login success & not lock
-            if (loginResponse.Code == 200 && loginResponse.IsLock != "Y")
+            if (loginResponse.Code == 200)
             {
+
+                if (loginResponse.IsLock == "Y")
+                {
+                    return Json(new { success = false, message = "Your account is locked. Please contact the administrator." });
+                }
 
                 Session["User"] = loginResponse.Username;
                 Session["Token"] = loginResponse.Token;
