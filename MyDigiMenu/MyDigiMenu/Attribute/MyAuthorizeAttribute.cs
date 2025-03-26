@@ -11,7 +11,7 @@ namespace MyDigiMenu.Attribute
 
             if (controllerName == "accountcontroller" && actionName == "login")
             {
-                return; // Skip authorization for HomeController.Login
+                return; // Skip authorization for AccountController.Login
             }
 
             // Check if the user is authenticated, if not redirect to Login page
