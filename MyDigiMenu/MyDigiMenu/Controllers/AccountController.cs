@@ -37,7 +37,7 @@ namespace MyDigiMenu.Controllers
                 return Json(new { success = false, message = "Username and password are required." });
             }
 
-            LoginResponse loginResponse = await login.loginUserToAPI(login);
+            LoginResponse loginResponse = await login.LoginUserToAPI(login);
 
             // Login success & not lock
             if (loginResponse.Code == 200)

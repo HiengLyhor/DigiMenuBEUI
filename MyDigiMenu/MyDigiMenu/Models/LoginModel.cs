@@ -13,7 +13,7 @@ namespace MyDigiMenu.Models
 
         private static readonly HttpClient client = new HttpClient();
 
-        public async Task<LoginResponse> loginUserToAPI(LoginModel loginUser)
+        public async Task<LoginResponse> LoginUserToAPI(LoginModel loginUser)
         {
 
 			try
