@@ -23,8 +23,7 @@ namespace MyDigiMenu.Controllers
         [MyAuthorize]
         public ActionResult ViewUser(string username)
         {
-            // Implement logic to view user details based on the username
-            // For example, you can fetch the user details from the database or API
+
             return View();
         }
 

@@ -2,6 +2,49 @@
     ViewBag.Title = "Contact Admin Support";
     ViewBag.Message = "Please use the form below to contact our admin support team.";
 }
+<main aria-labelledby="title">
+    <h2 id="title">@ViewBag.Title</h2>
+    <h3>@ViewBag.Message</h3>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-error">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    @using (Html.BeginForm("Contact", "Home", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required />
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required />
+        </div>
+        <div>
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" required></textarea>
+        </div>
+        <div>
+            <button type="submit">Submit</button>
+        </div>
+    }
+
+    <address>
+        <strong>Admin Support:</strong> <a href="mailto:Admin@Emenu.com">Admin@Emenu.com</a><br />
+        <strong>Telegram:</strong> <a href="https://t.me/Lyhor_Hieng" target="_blank">Contact us on Telegram</a>
+    </address>
+</main>
+
 <style>
     main {
         max-width: 600px;
@@ -78,45 +121,3 @@
             margin-bottom: 5px;
         }
 </style>
-<main aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title</h2>
-    <h3>@ViewBag.Message</h3>
-
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success">
-            @TempData["SuccessMessage"]
-        </div>
-    }
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div class="alert alert-error">
-            @TempData["ErrorMessage"]
-        </div>
-    }
-
-    @using (Html.BeginForm("Contact", "Home", FormMethod.Post))
-    {
-        @Html.AntiForgeryToken()
-        <div>
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required />
-        </div>
-        <div>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required />
-        </div>
-        <div>
-            <label for="message">Message:</label>
-            <textarea id="message" name="message" required></textarea>
-        </div>
-        <div>
-            <button type="submit">Submit</button>
-        </div>
-    }
-
-    <address>
-        <strong>Admin Support:</strong> <a href="mailto:Admin@Emenu.com">Admin@Emenu.com</a><br />
-        <strong>Telegram:</strong> <a href="https://t.me/Lyhor_Hieng" target="_blank">Contact us on Telegram</a>
-    </address>
-</main>
