@@ -15,7 +15,7 @@ namespace MyDigiMenu.Attribute
             }
 
             // Check if the user is authenticated, if not redirect to Login page
-            if (filterContext.HttpContext.Session["User"] == null)
+            if (filterContext.HttpContext.Session["Token"] == null)
             {
                 // Redirect to the Login action of the AccountController
                 filterContext.Result = new RedirectToRouteResult(
