@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,7 +41,7 @@ namespace MyDigiMenu.Models
 			catch (Exception ex)
 			{
 				if (ex.InnerException.Message.Equals("Unable to connect to the remote server")) await GeneralAction.SendMessageAsync($"Backend Web Unable to connect to API.\nError At: (UTC) {DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff")}"); // Push Tele Notif
-                return new LoginResponse { Code = 500, Message = "Error occurred during login." };
+                return new LoginResponse { Code = (int)HttpStatusCode.InternalServerError, Message = "Error occurred during login." };
             }
 
         }

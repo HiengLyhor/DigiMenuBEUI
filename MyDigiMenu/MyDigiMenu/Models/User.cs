@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.EnterpriseServices.Internal;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -40,7 +41,7 @@ namespace MyDigiMenu.Models
             catch (Exception ex)
             {
                 await GeneralAction.SendMessageAsync("Error occurred during GetAllUsers: " + ex.Message);
-                return new AllUserResponse(500, "Error occurred during GetAllUsers.");
+                return new AllUserResponse((int)HttpStatusCode.InternalServerError, "Error occurred during GetAllUsers.");
             }
 
         }

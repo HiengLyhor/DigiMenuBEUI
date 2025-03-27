@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Security.AntiXss;
 using System.Web.Security;
 using System.Threading.Tasks;
+using System.Net;
 
 namespace MyDigiMenu.Controllers
 {
@@ -40,7 +41,7 @@ namespace MyDigiMenu.Controllers
             LoginResponse loginResponse = await login.LoginUserToAPI(login);
 
             // Login success & not lock
-            if (loginResponse.Code == 200)
+            if (loginResponse.Code == (int)HttpStatusCode.OK)
             {
 
                 if (loginResponse.IsLock == "Y")
