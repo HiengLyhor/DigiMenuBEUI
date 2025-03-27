@@ -17,7 +17,7 @@ namespace MyDigiMenu.Controllers
 
                 return View(response);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "MenuManagement");
         }
 
         [MyAuthorize]
@@ -27,5 +27,16 @@ namespace MyDigiMenu.Controllers
             return View();
         }
 
+        [MyAuthorize]
+        public ActionResult CreateUser()
+        {
+            if (Session["Super"].ToString() == "Y")
+            {
+                return View();
+            }
+
+            return RedirectToAction("Index", "MenuManagement");
+
+        }
     }
 }

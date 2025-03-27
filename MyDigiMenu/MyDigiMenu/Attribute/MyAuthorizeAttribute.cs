@@ -2,8 +2,8 @@
 
 namespace MyDigiMenu.Attribute
 {
-	public class MyAuthorizeAttribute : AuthorizeAttribute
-	{
+    public class MyAuthorizeAttribute : AuthorizeAttribute
+    {
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
             var controllerName = filterContext.Controller.GetType().Name.ToLower();
@@ -17,8 +17,13 @@ namespace MyDigiMenu.Attribute
             // Check if the user is authenticated, if not redirect to Login page
             if (filterContext.HttpContext.Session["User"] == null)
             {
-                // If not authenticated, redirect to Login page
-                filterContext.Result = new RedirectResult("/Account/Login");
+                // Redirect to the Login action of the AccountController
+                filterContext.Result = new RedirectToRouteResult(
+                    new System.Web.Routing.RouteValueDictionary
+                    {
+                        { "controller", "Account" },
+                        { "action", "Login" }
+                    });
             }
         }
 

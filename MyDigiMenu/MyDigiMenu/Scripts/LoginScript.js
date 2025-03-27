@@ -32,7 +32,12 @@
                 $('#loading-spinner').hide();
 
                 if (response.success) {
-                    window.location.href = '/Home/Index';
+
+                    if (response.admin) {
+                        window.location.href = '/User/AllUsers';
+                    } else {
+                        window.location.href = '/MenuManagement/Index';
+                    }
                 } else {
                     // Show failure notification
                     showNotification('Login failed: ' + response.message, 'error');

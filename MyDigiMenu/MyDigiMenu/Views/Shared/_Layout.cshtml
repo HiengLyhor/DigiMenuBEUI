@@ -100,12 +100,6 @@
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link active" href="~/Home/Index">
-                    <i class="fas fa-home"></i> <!-- Home icon -->
-                    &ensp;Home
-                </a>
-            </li>
             @if (Session["Super"].ToString() == "Y")
             {
                 <li class="nav-item">
@@ -121,12 +115,15 @@
                     &ensp;Products
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="~/Home/Contact">
-                    <i class="fa fa-phone-square"></i>
-                    &ensp;Contact Us
-                </a>
-            </li>
+            @if (Session["Super"].ToString() == "N")
+            {
+                <li class="nav-item">
+                    <a class="nav-link" href="~/Home/Contact">
+                        <i class="fa fa-phone-square"></i>
+                        &ensp;Contact Us
+                    </a>
+                </li>
+            }
         </ul>
     </div>
 

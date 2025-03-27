@@ -21,7 +21,7 @@ namespace MyDigiMenu.Controllers
         public ActionResult Login()
         {
             LoginModel login = new LoginModel();
-            if (Session["User"] != null) return RedirectToAction("Index", "Home");
+            if (Session["User"] != null) return RedirectToAction("Index", "MenuManagement");
             return View(login);
         }
 
@@ -70,7 +70,8 @@ namespace MyDigiMenu.Controllers
                 HttpCookie faCookie = new HttpCookie(FormsAuthentication.FormsCookieName, HttpUtility.HtmlDecode(AntiXssEncoder.HtmlEncode(encTicket, false)));
 
                 // Return success response
-                return Json(new { success = true });
+                bool isAdmin = loginResponse.IsSpecial == "Y";
+                return Json(new { success = true, admin = isAdmin });
             }
             else
             {

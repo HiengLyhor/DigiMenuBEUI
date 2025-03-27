@@ -15,7 +15,10 @@
         <label for="asc">Ascending:</label>
         <input type="checkbox" name="asc" id="asc" class="form-control" />
     </div>
-    <button type="submit" class="btn btn-primary">Filter</button>
+    <button type="submit" class="btn btn-primary">
+        Filter
+    </button>
+    <a href="@Url.Action("CreateUser", "User")" class="btn btn-primary" style="margin-left: 10px;">Create New User</a>
 </form>
 
 @if (Model.Code != 200)
