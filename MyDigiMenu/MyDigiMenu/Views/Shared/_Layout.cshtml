@@ -100,7 +100,7 @@
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <ul class="nav flex-column">
-            @if (Session["Super"].ToString() == "Y")
+            @if (Session["Super"].ToString() == "ADMIN")
             {
                 <li class="nav-item">
                     <a class="nav-link" href="~/User/AllUsers">
@@ -115,7 +115,7 @@
                     &ensp;Products
                 </a>
             </li>
-            @if (Session["Super"].ToString() == "N")
+            @if (Session["Super"].ToString() == "USER")
             {
                 <li class="nav-item">
                     <a class="nav-link" href="~/Home/Contact">

@@ -70,7 +70,10 @@ namespace MyDigiMenu.Models
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
-                var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+
+                var jsonContent = JsonConvert.SerializeObject(data);
+
+                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
                 var response = await client.PostAsync(url, content);
 
                 if (response.IsSuccessStatusCode)

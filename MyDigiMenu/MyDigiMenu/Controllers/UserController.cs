@@ -9,11 +9,11 @@ namespace MyDigiMenu.Controllers
     {
         [MyAuthorize]
         [HttpGet]
-        public async Task<ActionResult> AllUsers(string filterBy, string asc)
+        public async Task<ActionResult> AllUsers(string filterBy)
         {
-            if (Session["Super"].ToString() == "Y")
+            if (Session["Super"].ToString() == "ADMIN")
             {
-                AllUserResponse response = await new User().GetAllUsers(filterBy, asc, Session["Token"].ToString(), Session["User"].ToString());
+                AllUserResponse response = await new User().GetAllUsers(filterBy, Session["Token"].ToString(), Session["User"].ToString());
 
                 return View(response);
             }
@@ -30,7 +30,7 @@ namespace MyDigiMenu.Controllers
         [MyAuthorize]
         public ActionResult CreateUser()
         {
-            if (Session["Super"].ToString() == "Y")
+            if (Session["Super"].ToString() == "ADMIN")
             {
                 return View();
             }

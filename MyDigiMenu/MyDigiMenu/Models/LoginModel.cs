@@ -58,14 +58,12 @@ namespace MyDigiMenu.Models
 		public DateTime CreateDate { get; set; }
 
 		public DateTime ExpDate { get; set; }
-
-		public string IsSpecial { get; set; }
 		
-		public string IsLock { get; set; }
+		public bool Active { get; set; }
+
+		public string Role { get; set; }
 
 		public string Token { get; set; }
-
-		public string VenueName { get; set; }
 
 		public string ShopName { get; set; }
 	}

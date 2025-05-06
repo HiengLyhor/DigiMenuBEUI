@@ -44,18 +44,20 @@ namespace MyDigiMenu.Controllers
             if (loginResponse.Code == (int)HttpStatusCode.OK)
             {
 
-                if (loginResponse.IsLock == "Y")
+                if (!loginResponse.Active)
                 {
                     return Json(new { success = false, message = "Your account is locked. Please contact the administrator." });
                 }
+
+                string status = "N";
+                if (loginResponse.Active) status = "Y";
 
                 Session["User"] = loginResponse.Username;
                 Session["Token"] = loginResponse.Token;
                 Session["CreateDate"] = loginResponse.CreateDate;
                 Session["ExpireDate"] = loginResponse.ExpDate;
-                Session["Super"] = loginResponse.IsSpecial; // Y & N
-                Session["Lock"] = loginResponse.IsLock; // Y & N
-                Session["Venue"] = loginResponse.VenueName;
+                Session["Super"] = loginResponse.Role; // ADMIN & USER
+                Session["Lock"] = status; // Y & N
                 Session["ShopName"] = loginResponse.ShopName;
 
                 string userData = JsonConvert.SerializeObject(login);
@@ -71,7 +73,7 @@ namespace MyDigiMenu.Controllers
                 HttpCookie faCookie = new HttpCookie(FormsAuthentication.FormsCookieName, HttpUtility.HtmlDecode(AntiXssEncoder.HtmlEncode(encTicket, false)));
 
                 // Return success response
-                bool isAdmin = loginResponse.IsSpecial == "Y";
+                bool isAdmin = loginResponse.Role.Equals("ADMIN");
                 return Json(new { success = true, admin = isAdmin });
             }
             else

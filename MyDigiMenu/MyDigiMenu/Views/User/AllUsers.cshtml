@@ -36,22 +36,22 @@ else
                 <th>Username</th>
                 <th>Own Shop</th>
                 <th>Create Date</th>
-                <th>Exp Date</th>
-                <th>Is Special</th>
-                <th>Is Lock</th>
+                <th>Expire Date</th>
+                <th>Role</th>
+                <th>Active</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var user in Model.UserLogins)
+            @foreach (var user in Model.UserInfo)
             {
                 <tr>
                     <td>@user.Username</td>
-                    <td>@user.OwnShop</td>
+                    <td>@user.ShopName</td>
                     <td>@user.CreateDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
                     <td>@user.ExpDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                    <td>@user.IsSpecial</td>
-                    <td>@user.IsLock</td>
+                    <td>@user.Role</td>
+                    <td>@user.Active</td>
                     <td>
                         <form action="@Url.Action("ViewUser", "User")" method="get">
                             <input type="hidden" name="username" value="@user.Username" />

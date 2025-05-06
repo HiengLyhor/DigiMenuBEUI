@@ -1,12 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.EnterpriseServices.Internal;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Web.ModelBinding;
 
 namespace MyDigiMenu.Models
 {
@@ -14,25 +9,24 @@ namespace MyDigiMenu.Models
     {
 
         public string Username { get; set; }
-        public string OwnShop { get; set; }
+        public string ShopName { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime ExpDate { get; set; }
-        public string IsSpecial { get; set; }
-        public string IsLock { get; set; }
+        public string Role { get; set; }
+        public bool Active{ get; set; }
 
-        public async Task<AllUserResponse> GetAllUsers(string filterBy, string asc, string jwtToken, string user)
+        public async Task<AllUserResponse> GetAllUsers(string filterBy, string jwtToken, string user)
         {
             try
             {
 
                 var requestBody = new
                 {
-                    FilterBy = filterBy,
-                    Asc = asc,
+                    SearchVal = filterBy,
                     UserRequest = user
                 };
 
-                var url = GeneralAction.GetBaseAPIUrl() + "user/all-user";
+                var url = GeneralAction.GetBaseAPIUrl() + "user/all";
                 var result = await GeneralAction.PostAsync<AllUserResponse>(url, requestBody, jwtToken);
 
                 return result;
@@ -46,7 +40,7 @@ namespace MyDigiMenu.Models
 
         }
     }
-    public class AllUserResponse : User
+    public class AllUserResponse
     {
         public int Code { get; set; }
         public string Message { get; set; }
@@ -57,7 +51,7 @@ namespace MyDigiMenu.Models
             this.Message = message;
         }
 
-        public List<User> UserLogins { get; set; }
+        public List<User> UserInfo { get; set; }
 
         public AllUserResponse() { }
     }
