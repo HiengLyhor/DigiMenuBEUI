@@ -33,6 +33,12 @@ namespace MyDigiMenu.Models
 
                 var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(responseBody);
 
+				if (loginResponse.Code.Equals(((int)HttpStatusCode.InternalServerError)))
+				{
+                    await GeneralAction.SendMessageAsync("#LoginModel_Error\n#Error: " + loginResponse.Message + "\nError At: (UTC) " + DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                    return new LoginResponse { Code = (int)HttpStatusCode.InternalServerError, Message = "Error occurred during login." };
+                }
+
 				loginResponse.Token = Encryption.Decrypt(loginResponse.Token); // Will catch if no token provided
 
                 return loginResponse;
@@ -40,7 +46,7 @@ namespace MyDigiMenu.Models
 			}
 			catch (Exception ex)
 			{
-				await GeneralAction.SendMessageAsync(ex.Message + "\nError At: (UTC) " + DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+				await GeneralAction.SendMessageAsync("#LoginModel_Error\n#Error: " + ex.Message + "\nError At: (UTC) " + DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"));
                 return new LoginResponse { Code = (int)HttpStatusCode.InternalServerError, Message = "Error occurred during login." };
             }
 
@@ -55,11 +61,11 @@ namespace MyDigiMenu.Models
 
 		public string Username {  set; get; }
 
-		public DateTime CreateDate { get; set; }
+		public DateTime? CreateDate { get; set; }
 
-		public DateTime ExpDate { get; set; }
+		public DateTime? ExpDate { get; set; }
 		
-		public bool Active { get; set; }
+		public bool? Active { get; set; }
 
 		public string Role { get; set; }
 
