@@ -13,12 +13,9 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700" rel="stylesheet">
 
     <!-- Bootstrap core CSS -->
-    <link href="~/Content/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 
-    <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="~/Content/assets/css/fontawesome.css">
-    <link rel="stylesheet" href="~/Content/assets/css/templatemo-host-cloud.css">
-    <link rel="stylesheet" href="~/Content/assets/css/owl.css">
 </head>
 <body>
     <!-- partial:index.partial.html -->
@@ -236,6 +233,47 @@
     <script src='//s3-us-west-2.amazonaws.com/s.cdpn.io/16327/CustomEase.min.js?r=2'></script>
 
 </body>
+
+<script>
+
+    window.onload = function () {
+        // Hide the link with specific text
+        $("a").filter(function () {
+            return $(this).text() === "Web hosting by Somee.com";  // Match by text
+        }).hide();  // Hide the matching link
+
+        // Hide the <div> containing specific text
+        $("div").filter(function () {
+            return $(this).text().includes("Web hosting by Somee.com") || $(this).text().includes("Hosted Windows Virtual Server");  // Match by text
+        }).hide();  // Hide the entire <div>
+
+        // Hide the <div> with specific styles (opacity, position, and bottom)
+        $("div").filter(function () {
+            return $(this).css("opacity") === "0.9" &&
+                $(this).css("position") === "fixed" &&
+                $(this).css("bottom") === "0px";  // Match by opacity, position, and bottom
+        }).hide();  // Hide the matching div
+    };
+
+    $(document).ready(function () {
+        $("a").filter(function () {
+            return $(this).text() === "Web hosting by Somee.com";  // Match by text
+        }).hide();  // Hide the matching link
+
+        $("div").filter(function () {
+            return $(this).text().includes("Web hosting by Somee.com") || $(this).text().includes("Hosted Windows Virtual Server");  // Match by text
+        }).hide();  // Hide the entire <div>
+
+        $("div").filter(function () {
+            return $(this).css("opacity") === "0.9" &&
+                $(this).css("position") === "fixed" &&
+                $(this).css("bottom") === "0px";  // Match by opacity, position, and bottom
+        }).hide();  // Hide the matching div
+
+    });
+
+
+</script>
 
 <style>
 body, html {
