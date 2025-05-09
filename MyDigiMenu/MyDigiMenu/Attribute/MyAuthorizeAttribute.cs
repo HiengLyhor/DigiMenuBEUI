@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace MyDigiMenu.Attribute
@@ -10,24 +11,12 @@ namespace MyDigiMenu.Attribute
             var controllerName = filterContext.Controller.GetType().Name.ToLower();
             var actionName = filterContext.ActionDescriptor.ActionName.ToLower();
 
-            if (controllerName == "accountcontroller" && actionName == "login")
-            {
-                return; // Skip authorization for AccountController.Login
-            }
+            var actionsToSkip = new List<string> { "login", "forgotpassword", "verifyotp", "resetpassword" };
 
-            if (controllerName == "accountcontroller" && actionName == "forgotpassword")
+            // Skip authorization if the controller is "accountcontroller" and the action is in the actionsToSkip list
+            if (controllerName == "accountcontroller" && actionsToSkip.Contains(actionName))
             {
-                return; // Skip authorization for AccountController.ForgotPassword
-            }
-
-            if (controllerName == "accountcontroller" && actionName == "verifyotp")
-            {
-                return; // Skip authorization for AccountController.ForgotPassword
-            }
-
-            if (controllerName == "accountcontroller" && actionName == "resetpassword")
-            {
-                return; // Skip authorization for AccountController.ForgotPassword
+                return; // Skip authorization
             }
 
             // Check if the user is authenticated, if not redirect to Login page

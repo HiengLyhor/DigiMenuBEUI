@@ -104,6 +104,7 @@ namespace MyDigiMenu.Controllers
             }
             catch (Exception ex)
             {
+                await GeneralAction.SendMessageAsync(ex.Message);
                 return Json(new
                 {
                     success = false,
