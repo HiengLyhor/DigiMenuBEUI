@@ -36,8 +36,12 @@ namespace MyDigiMenu.Controllers
 
             var otpSent = await passwordReset.SendOTP(passwordReset);
 
-            if (otpSent.Code == (int)HttpStatusCode.OK) return RedirectToAction("VerifyOTP", passwordReset);
+            if (otpSent.Code == (int)HttpStatusCode.OK)
+            {
+                Session["AllowVerify"] = "Allow";
+                return RedirectToAction("VerifyOTP", passwordReset);
 
+            }
             TempData["ErrorMessage"] = otpSent.Message;
             return View();
         }
@@ -45,6 +49,8 @@ namespace MyDigiMenu.Controllers
         [HttpGet]
         public ActionResult VerifyOTP(PasswordReset reset, string valid)
         {
+            if (Session["AllowVerify"] == null) return RedirectToAction("ForgotPassword");
+
             reset.OTP = null;
             if (Session["UserReset"] != null)
             {
@@ -109,7 +115,7 @@ namespace MyDigiMenu.Controllers
         [HttpGet]
         public ActionResult ResetPassword()
         {
-            if (Session["OTPVerifiedUsername"] == null) return RedirectToAction("VerifyOTP");
+            if (Session["OTPVerifiedUsername"] == null) return RedirectToAction("ForgotPassword");
             string username = Session["OTPVerifiedUsername"].ToString();
             return View(new PasswordReset { Username = username });
             
