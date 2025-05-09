@@ -13,6 +13,49 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
+
+        .expandable-menu {
+            position: relative;
+            list-style: none;
+        }
+
+        .submenu {
+            display: none;
+            padding-left: 20px;
+            list-style: none;
+            margin-top: 5px;
+            border-left: 2px solid #ddd;
+        }
+
+            .submenu li {
+                padding: 8px 0;
+            }
+
+                .submenu li a {
+                    color: #EEEEFF;
+                    text-decoration: none;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+
+                    .submenu li a:hover {
+                        color: #0066cc;
+                    }
+
+        .menu-arrow {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .expandable-menu.active .menu-arrow {
+            transform: rotate(180deg);
+        }
+
+        .expandable-menu.active .submenu {
+            display: block;
+        }
+
         /* Custom styles for the layout */
         body {
             display: flex;
@@ -100,29 +143,51 @@
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <ul class="nav flex-column">
+
             @if (Session["Super"].ToString() == "ADMIN")
             {
-                <li class="nav-item">
-                    <a class="nav-link" href="~/User/AllUsers">
+
+                <li class="nav-item expandable-menu">
+                    <a class="nav-link" href="#" onclick="toggleExpandableMenu(event)">
                         <i class="fas fa-users"></i>
                         &ensp;Users
+                        <i class="fas fa-chevron-down menu-arrow"></i>
                     </a>
+                    <ul class="submenu">
+                        <li><a class="dropdown-item" href="~/User/Active">Active Users</a></li>
+                        <li><a class="dropdown-item" href="~/User/Inactive">Inactive User</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Extra Feature...</a></li>
+                    </ul>
                 </li>
+
             }
-            <li class="nav-item">
-                <a class="nav-link" href="~/MenuManagement/Index">
+
+            <li class="nav-item expandable-menu">
+                <a class="nav-link" href="#" onclick="toggleExpandableMenu(event)">
                     <i class="fas fa-box"></i>
-                    &ensp;Products
+                    &ensp;Recipes
+                    <i class="fas fa-chevron-down menu-arrow"></i>
                 </a>
+                <ul class="submenu">
+                    <li><a class="dropdown-item" href="~/Recipe/Active">Active Recipes</a></li>
+                    <li><a class="dropdown-item" href="~/Recipe/Inactive">Inactive Recipes</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Extra Feature...</a></li>
+                </ul>
             </li>
+
+
             @if (Session["Super"].ToString() == "USER")
             {
+
                 <li class="nav-item">
                     <a class="nav-link" href="~/Home/Contact">
                         <i class="fa fa-phone-square"></i>
                         &ensp;Contact Us
                     </a>
                 </li>
+
             }
         </ul>
     </div>
@@ -140,12 +205,19 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img src="~/Content/logo-color.png" alt="User Avatar" width="30" height="30" class="rounded-circle">
+                        @if (!Session["ProfilePicture"].ToString().Equals("https://digital-menu-api-v2.onrender.com/v1/img/null"))
+                        {
+                            <img src="@Session["ProfilePicture"]" alt="User Avatar" width="30" height="30" class="rounded-circle">
+                        }
+                        else
+                        {
+                            <img src="~/Content/logo-color.png" alt="User Avatar" width="30" height="30" class="rounded-circle">
+                        }
                         &ensp;@Session["User"]
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Profile</a>
-                        <a class="dropdown-item" href="#">Settings</a>
+                        <a class="dropdown-item" href="~/User/Profile">Profile</a>
+                        <a class="dropdown-item" href="~/User/Setting">Settings</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="~/Account/SignOut">Logout</a>
                     </div>
@@ -164,6 +236,21 @@
 </body>
 </html>
 <script>
+
+    function toggleExpandableMenu(event) {
+        event.preventDefault();
+        const menuItem = event.target.closest('.expandable-menu');
+        menuItem.classList.toggle('active');
+    }
+
+    // Optional: Close when clicking elsewhere
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.expandable-menu')) {
+            document.querySelectorAll('.expandable-menu').forEach(menu => {
+                menu.classList.remove('active');
+            });
+        }
+    });
 
     window.onload = function () {
         // Hide the link with specific text

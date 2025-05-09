@@ -11,6 +11,9 @@ namespace MyDigiMenu.Models
 	{
 		public string Username { get; set; }
 		public string Password { get; set; }
+		public string OTP { get; set; }
+		public string NewPassword { get; set; }
+		public string ConfirmPassword { get; set; }
 
         private static readonly HttpClient client = new HttpClient();
 
@@ -35,6 +38,10 @@ namespace MyDigiMenu.Models
 
 				if (loginResponse.Code.Equals(((int)HttpStatusCode.InternalServerError)))
 				{
+					if (loginResponse.Message.Equals("Bad credentials"))
+					{
+						return new LoginResponse { Code = (int)HttpStatusCode.InternalServerError, Message = "Invalid username or password." };
+                    }
                     await GeneralAction.SendMessageAsync("#LoginModel_Error\n#Error: " + loginResponse.Message + "\nError At: (UTC) " + DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"));
                     return new LoginResponse { Code = (int)HttpStatusCode.InternalServerError, Message = "Error occurred during login." };
                 }
@@ -71,6 +78,11 @@ namespace MyDigiMenu.Models
 
 		public string Token { get; set; }
 
-		public string ShopName { get; set; }
-	}
+		public DateTime? TokenExp { get; set; }
+
+        public string ShopName { get; set; }
+
+		public string ImgUrl { get; set; }
+
+    }
 }

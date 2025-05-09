@@ -34,9 +34,9 @@
                 if (response.success) {
 
                     if (response.admin) {
-                        window.location.href = '/User/AllUsers';
+                        window.location.href = '/User/Active';
                     } else {
-                        window.location.href = '/MenuManagement/Index';
+                        window.location.href = '/Recipe/Active';
                     }
                 } else {
                     // Show failure notification
@@ -71,6 +71,6 @@
         setTimeout(function () {
             $('#notification').removeClass('show');
         }, 5000); // 5 seconds
-    }
+    }   
 
 });

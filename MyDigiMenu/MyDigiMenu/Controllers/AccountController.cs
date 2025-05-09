@@ -7,6 +7,8 @@ using System.Web.Security.AntiXss;
 using System.Web.Security;
 using System.Threading.Tasks;
 using System.Net;
+using MyDigiMenu.Attribute;
+using Microsoft.Ajax.Utilities;
 
 namespace MyDigiMenu.Controllers
 {
@@ -18,11 +20,124 @@ namespace MyDigiMenu.Controllers
             return RedirectToLocal("~/");
         }
 
+        [MyAuthorize]
+        [HttpGet]
+        public ActionResult ForgotPassword()
+        {
+            if (Session["User"] != null) return RedirectToAction("Active", "Recipe");
+            return View(new PasswordReset());
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ForgotPassword(PasswordReset passwordReset)
+        {
+
+            if (passwordReset.Username == null) return RedirectToAction("ForgotPassword");
+
+            var otpSent = await passwordReset.SendOTP(passwordReset);
+
+            if (otpSent.Code == (int)HttpStatusCode.OK) return RedirectToAction("VerifyOTP", passwordReset);
+
+            TempData["ErrorMessage"] = otpSent.Message;
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult VerifyOTP(PasswordReset reset, string valid)
+        {
+            reset.OTP = null;
+            return View(reset);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> VerifyOTP(PasswordReset passwordReset)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "Please enter the 6-digit code" });
+            }
+            try
+            {
+                var isOtpValid = await passwordReset.VerifyOTP(passwordReset);
+
+                if (isOtpValid.Code == (int)HttpStatusCode.OK)
+                {
+                    // 2. If valid, mark username as verified (create temp session/token)
+                    Session["OTPVerifiedUsername"] = passwordReset.Username;
+
+                    return Json(new
+                    {
+                        success = true,
+                        message = "Verification successful!",
+                        redirectUrl = Url.Action("ResetPassword")
+                    });
+                }
+
+                return Json(new
+                {
+                    success = false,
+                    message = isOtpValid.Message
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "An error occurred. Please try again later."
+                });
+            }
+        }
+
+        [HttpGet]
+        public ActionResult ResetPassword()
+        {
+            if (Session["OTPVerifiedUsername"] == null) return RedirectToAction("VerifyOTP");
+            string username = Session["OTPVerifiedUsername"].ToString();
+            return View(new PasswordReset { Username = username });
+            
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ResetPassword(PasswordReset passwordReset)
+        {
+            if (Session["OTPVerifiedUsername"] == null)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Invalid username to reset password.",
+                    redirectUrl = Url.Action("VerifyOTP")
+                });
+            }
+
+            Session.Remove("OTPVerifiedUsername");
+            var resetStatus = await passwordReset.ResetPassword(passwordReset);
+
+            if (resetStatus.Code == (int)HttpStatusCode.OK)
+            {
+                return Json(new
+                {
+                    success = true,
+                    message = "Password Reset successful!",
+                    redirectUrl = Url.Action("Login")
+                });
+            }
+
+            return Json(new
+            {
+                success = false,
+                message = resetStatus.Message,
+                redirectUrl = Url.Action("ForgotPassword")
+            });
+
+        }
+
         [HttpGet]
         public ActionResult Login()
         {
             LoginModel login = new LoginModel();
-            if (Session["User"] != null) return RedirectToAction("Index", "MenuManagement");
+            if (Session["User"] != null) return RedirectToAction("Active", "Recipe");
             return View(login);
         }
 
@@ -30,7 +145,6 @@ namespace MyDigiMenu.Controllers
         public async Task<JsonResult> Login(LoginModel login)
         {
 
-            
             if (Session["User"] != null) return Json(new { success = true });
 
             if (string.IsNullOrEmpty(login.Username) || string.IsNullOrEmpty(login.Password))
@@ -44,13 +158,14 @@ namespace MyDigiMenu.Controllers
             if (loginResponse.Code == (int)HttpStatusCode.OK)
             {
 
-                if (!loginResponse.Active)
+                bool isActive = loginResponse.Active.Value;
+                if (!isActive)
                 {
                     return Json(new { success = false, message = "Your account is locked. Please contact the administrator." });
                 }
 
                 string status = "N";
-                if (loginResponse.Active) status = "Y";
+                if (isActive) status = "Y";
 
                 Session["User"] = loginResponse.Username;
                 Session["Token"] = loginResponse.Token;
@@ -59,6 +174,8 @@ namespace MyDigiMenu.Controllers
                 Session["Super"] = loginResponse.Role; // ADMIN & USER
                 Session["Lock"] = status; // Y & N
                 Session["ShopName"] = loginResponse.ShopName;
+                Session["ProfilePicture"] = loginResponse.ImgUrl;
+                Session["TokenExp"] = loginResponse.TokenExp;
 
                 string userData = JsonConvert.SerializeObject(login);
                 FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(

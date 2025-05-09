@@ -1,0 +1,259 @@
+﻿@model MyDigiMenu.Models.PasswordReset
+@{
+    Layout = null;
+    ViewBag.Title = "Verify OTP - E-Menu Admin";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    <link rel="icon" type="image/png" href="~/Content/logo-color.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/Content/LoginStyle.css">
+    <style>
+        /* OTP-specific styles */
+        .otp-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .otp-input {
+            width: 40px;
+            height: 50px;
+            text-align: center;
+            font-size: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+            .otp-input:focus {
+                border-color: #0066cc;
+                box-shadow: 0 0 0 2px rgba(0,102,204,0.2);
+            }
+
+        .resend-otp {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+            .resend-otp a {
+                color: #0066cc;
+                cursor: pointer;
+                text-decoration: none;
+            }
+
+                .resend-otp a.disabled {
+                    color: #999;
+                    cursor: not-allowed;
+                }
+
+        .timer {
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-container">
+            <div class="login-box">
+                <img src="~/Content/logo-no-background.png" alt="E-Menu Logo" class="logo">
+                <h2>Verify OTP</h2>
+                <p class="instruction-text">We've sent a 6-digit code to your telegram</p>
+
+                @using (Html.BeginForm("VerifyOTP", "Account", FormMethod.Post, new { id = "verify-otp-form" }))
+                {
+                    @Html.HiddenFor(m => m.Username)
+
+                    <div class="otp-container">
+                        @for (int i = 0; i < 6; i++)
+                        {
+                            <input type="text"
+                                   class="otp-input"
+                                   name="OtpDigits"
+                                   maxlength="1"
+                                   data-index="@i"
+                                   oninput="moveToNext(this)"
+                                   onkeydown="handleBackspace(this, event)"
+                                   required>
+                        }
+                    </div>
+
+                    <div id="notification" class="notification" hidden>
+                        <span id="notification-message"></span>
+                    </div>
+
+                    <div class="button-container">
+                        <button type="submit" class="login-btn" id="verify-btn">Verify</button>
+                    </div>
+
+                    <div class="resend-otp">
+                        <a href="#" id="resend-link" class="disabled">Resend OTP</a>
+                        <span class="timer" id="timer">(02:00)</span>
+                    </div>
+
+                    <div class="forgot-password">
+                        <a href="@Url.Action("Login", "Account")">
+                            <i class="fas fa-arrow-left"></i> Back to Login
+                        </a>
+                    </div>
+                }
+
+                <div id="loading-spinner" class="loading-spinner" style="display: none;">
+                    <div class="spinner">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // OTP input navigation
+        function moveToNext(input) {
+            if (input.value.length === 1) {
+                const nextIndex = parseInt(input.dataset.index) + 1;
+                const nextInput = document.querySelector(`.otp-input[data-index="${nextIndex}"]`);
+                if (nextInput) nextInput.focus();
+            }
+        }
+
+        function handleBackspace(input, event) {
+            if (event.key === 'Backspace' && input.value.length === 0) {
+                const prevIndex = parseInt(input.dataset.index) - 1;
+                const prevInput = document.querySelector(`.otp-input[data-index="${prevIndex}"]`);
+                if (prevInput) prevInput.focus();
+            }
+        }
+
+        // Timer functionality
+        function startTimer(duration, display) {
+            let timer = duration, minutes, seconds;
+            const interval = setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = "(" + minutes + ":" + seconds + ")";
+
+                if (--timer < 0) {
+                    clearInterval(interval);
+                    $('#resend-link').removeClass('disabled');
+                    display.textContent = "";
+                }
+            }, 1000);
+        }
+
+        $(document).ready(function() {
+            // Start 2-minute countdown
+            const twoMinutes = 60 * 2;
+            const display = document.querySelector('#timer');
+            startTimer(twoMinutes, display);
+
+            // Form submission
+            $('#verify-otp-form').submit(function(e) {
+                e.preventDefault();
+
+                // Combine OTP digits
+                const otpDigits = $('.otp-input').map(function() {
+                    return $(this).val();
+                }).get().join('');
+
+                // Add to form data
+                $('<input>').attr({
+                    type: 'hidden',
+                    name: 'OTP',
+                    value: otpDigits
+                }).appendTo('#verify-otp-form');
+
+                $('#loading-spinner').show();
+                $('#verify-btn').prop('disabled', true);
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        showNotification(response.message, response.success ? 'success' : 'error');
+                        if (response.success) {
+                            setTimeout(() => {
+                                window.location.href = response.redirectUrl || '@Url.Action("ResetPassword", "Account")';
+                            }, 1500);
+                        }
+                        setTimeout(() => {
+                            window.location.href = response.redirectUrl || '@Url.Action("VerifyOTP", "Account")';
+                        }, 1500);
+
+                    },
+                    error: function() {
+                        showNotification('An error occurred. Please try again.', 'error');
+                    },
+                    complete: function() {
+                        $('#loading-spinner').hide();
+                        $('#verify-btn').prop('disabled', false);
+                    }
+                });
+            });
+
+            // Resend OTP
+            $('#resend-link').click(function(e) {
+                e.preventDefault();
+
+                if ($(this).hasClass('disabled')) return;
+
+                $('#loading-spinner').show();
+
+                $.ajax({
+                    url: '@Url.Action("ForgotPassword", "Account")',
+                    type: 'POST',
+                    data: { Username: $('#Username').val() },
+                    success: function (response) {
+                        showNotification("OTP Resent.", "success")
+                    },
+                    error: function() {
+                    },
+                    complete: function() {
+                        $('#loading-spinner').hide();
+                    }
+                });
+            });
+
+            function showNotification(message, type) {
+                // Set the notification message
+                $('#notification-message').text(message);
+
+                // Add class based on the type of notification (success or error)
+                if (type === 'error') {
+
+                    $('#notification').css('background-color', '#e74c3c'); // Red for errors
+                } else {
+                    $('#notification').css('background-color', '#2ecc71'); // Green for success
+                }
+
+                // Show the notification with a fade-in effect
+                $('#notification').addClass('show');
+
+                // Hide the notification after 5 seconds
+                setTimeout(function () {
+                    $('#notification').removeClass('show');
+                }, 5000); // 5 seconds
+            }
+        });
+    </script>
+</body>
+</html>
