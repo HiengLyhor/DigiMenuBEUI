@@ -46,6 +46,14 @@ namespace MyDigiMenu.Controllers
         public ActionResult VerifyOTP(PasswordReset reset, string valid)
         {
             reset.OTP = null;
+            if (Session["UserReset"] != null)
+            {
+                reset.Username = Session["UserReset"].ToString();
+            }
+            else
+            {
+                Session["UserReset"] = reset.Username;
+            }
             return View(reset);
         }
 
@@ -58,6 +66,15 @@ namespace MyDigiMenu.Controllers
             }
             try
             {
+                if (Session["UserReset"] != null)
+                {
+                    passwordReset.Username = Session["UserReset"].ToString();
+                }
+                else
+                {
+                    Session["UserReset"] = passwordReset.Username;
+                }
+
                 var isOtpValid = await passwordReset.VerifyOTP(passwordReset);
 
                 if (isOtpValid.Code == (int)HttpStatusCode.OK)
