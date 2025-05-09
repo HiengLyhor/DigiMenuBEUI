@@ -135,8 +135,20 @@ namespace MyDigiMenu.Controllers
                 });
             }
 
+            if (Session["Submitted"] != null)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "You already submitted the form. Refreshing browser...",
+                    redirectUrl = Url.Action("VerifyOTP")
+                });
+            }
+
             Session.Remove("OTPVerifiedUsername");
             var resetStatus = await passwordReset.ResetPassword(passwordReset);
+
+            Session["Submitted"] = "Yes";
 
             if (resetStatus.Code == (int)HttpStatusCode.OK)
             {
