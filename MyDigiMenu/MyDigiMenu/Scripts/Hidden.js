@@ -1,35 +1,32 @@
 window.onload = function () {
-    // Hide the link with specific text
     $("a").filter(function () {
-        return $(this).text() === "Web hosting by Somee.com";  // Match by text
-    }).hide();  // Hide the matching link
+        return $(this).text() === "Web hosting by Somee.com";
+    }).hide();
 
-    // Hide the <div> containing specific text
     $("div").filter(function () {
-        return $(this).text().includes("Web hosting by Somee.com") || $(this).text().includes("Hosted Windows Virtual Server");  // Match by text
-    }).hide();  // Hide the entire <div>
+        return $(this).text().includes("Web hosting by Somee.com") || $(this).text().includes("Hosted Windows Virtual Server");
+    }).hide();
 
-    // Hide the <div> with specific styles (opacity, position, and bottom)
     $("div").filter(function () {
         return $(this).css("opacity") === "0.9" &&
             $(this).css("position") === "fixed" &&
-            $(this).css("bottom") === "0px";  // Match by opacity, position, and bottom
-    }).hide();  // Hide the matching div
+            $(this).css("bottom") === "0px";
+    }).hide();
 };  
 
 $(document).ready(function () {
     $("a").filter(function () {
-        return $(this).text() === "Web hosting by Somee.com";  // Match by text
-    }).hide();  // Hide the matching link
+        return $(this).text() === "Web hosting by Somee.com";
+    }).hide();
 
     $("div").filter(function () {
-        return $(this).text().includes("Web hosting by Somee.com") || $(this).text().includes("Hosted Windows Virtual Server");  // Match by text
-    }).hide();  // Hide the entire <div>
+        return $(this).text().includes("Web hosting by Somee.com") || $(this).text().includes("Hosted Windows Virtual Server");
+    }).hide();
 
     $("div").filter(function () {
         return $(this).css("opacity") === "0.9" &&
             $(this).css("position") === "fixed" &&
-            $(this).css("bottom") === "0px";  // Match by opacity, position, and bottom
-    }).hide();  // Hide the matching div
+            $(this).css("bottom") === "0px";
+    }).hide();
 
 });
