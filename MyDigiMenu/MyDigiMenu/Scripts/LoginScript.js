@@ -34,9 +34,9 @@
                 if (response.success) {
 
                     if (response.admin) {
-                        window.location.href = '/User/Active';
+                        window.location.href = '/User/All';
                     } else {
-                        window.location.href = '/Recipe/Active';
+                        window.location.href = '/Recipe/All';
                     }
                 } else {
                     // Show failure notification

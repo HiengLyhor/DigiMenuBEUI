@@ -2,7 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
+using System.Data;
+using System.Drawing.Imaging;
+using System.Drawing;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -88,9 +91,54 @@ namespace MyDigiMenu.Models
             }
         }
 
+        public List<Dictionary<string, object>> DataTableToList(DataTable dt)
+        {
+            var list = new List<Dictionary<string, object>>();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                var dict = new Dictionary<string, object>();
+
+                foreach (DataColumn col in dt.Columns)
+                {
+                    dict[col.ColumnName] = row[col];
+                }
+
+                list.Add(dict);
+            }
+
+            return list;
+        }
+
         public static string GetBaseAPIUrl()
         {
             return ConfigurationManager.AppSettings["BaseApiUrl"];
+        }
+
+        public static string GetAdminRight()
+        {
+            return Encryption.Encrypt(ConfigurationManager.AppSettings["AdminRights"]);
+        }
+
+        public static string CompressAndConvertToBase64(HttpPostedFileBase file)
+        {
+            using (var image = Image.FromStream(file.InputStream))
+            {
+                // Step 1: Compress the image by 50%
+                int newWidth = (int)(image.Width * 0.3);
+                int newHeight = (int)(image.Height * 0.3);
+                var compressedImage = new Bitmap(image, newWidth, newHeight);
+
+                // Step 2: Convert the compressed image to a memory stream
+                using (var memoryStream = new MemoryStream())
+                {
+                    compressedImage.Save(memoryStream, ImageFormat.Png); // Save as PNG format
+                    byte[] imageBytes = memoryStream.ToArray();
+
+                    // Step 3: Convert the byte array to a Base64 string
+                    return Convert.ToBase64String(imageBytes);
+                }
+            }
         }
     }
 }

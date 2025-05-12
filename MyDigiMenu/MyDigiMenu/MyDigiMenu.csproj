@@ -131,6 +131,7 @@
     <Compile Include="Models\Encryption.cs" />
     <Compile Include="Models\GeneralAction.cs" />
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\Pagination.cs" />
     <Compile Include="Models\PasswordReset.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -196,10 +197,14 @@
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Account\VerifyOTP.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Error\PageError.cshtml" />
+    <Content Include="Views\Error\BadRequest.cshtml" />
+    <Content Include="Views\Error\Unauthorize.cshtml" />
+    <Content Include="Views\User\All.cshtml" />
+    <Content Include="Views\User\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

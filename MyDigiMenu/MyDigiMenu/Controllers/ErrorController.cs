@@ -12,5 +12,13 @@ namespace MyDigiMenu.Controllers
         {
             return View();
         }
+        public ActionResult PageError()
+        {
+            return View();
+        }
+        public ActionResult BadRequest()
+        {
+            return View();
+        }
     }
 }

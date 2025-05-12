@@ -32,8 +32,21 @@ namespace MyDigiMenu.Attribute
                     });
             }
 
-            var tokenExp = filterContext.HttpContext.Session["TokenExp"] as DateTime?;
-            if (tokenExp.HasValue && tokenExp.Value < DateTime.Now)
+            if (filterContext.HttpContext.Session["TokenExp"] != null)
+            {
+                var tokenExp = filterContext.HttpContext.Session["TokenExp"] as DateTime?;
+                if (tokenExp.HasValue && tokenExp.Value < DateTime.Now)
+                {
+                    filterContext.HttpContext.Session.Clear();
+                    // Redirect to the Login action of the AccountController
+                    filterContext.Result = new RedirectToRouteResult(
+                        new System.Web.Routing.RouteValueDictionary
+                        {
+                            { "controller", "Account" },
+                            { "action", "Login" }
+                        });
+                }
+            }else
             {
                 filterContext.HttpContext.Session.Clear();
                 // Redirect to the Login action of the AccountController
@@ -44,6 +57,7 @@ namespace MyDigiMenu.Attribute
                         { "action", "Login" }
                     });
             }
+
         }
 
     }

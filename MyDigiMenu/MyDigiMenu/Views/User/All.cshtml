@@ -1,0 +1,191 @@
+﻿@{
+    ViewBag.Title = "User Management";
+}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h6 class="m-0 font-weight-bold text-primary">User List</h6>
+        <div>
+            <a href="@Url.Action("Create", "User")" class="btn btn-primary btn-sm">
+                <i class="fas fa-plus"></i> Add New User
+            </a>
+        </div>
+    </div>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Success!</strong> @TempData["SuccessMessage"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+    else if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Error!</strong> @TempData["ErrorMessage"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+    <div class="row mb-3" style="margin-top: 20px; margin-left: 10px">
+        <div class="col-md-4">
+            <div class="input-group">
+                <input type="text" id="customSearch" class="form-control" placeholder="Search users...">
+                <div class="input-group-append">
+                    <button id="searchButton" class="btn btn-primary" type="button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="userTable" class="table table-striped table-bordered nowrap" style="width:100%">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Username</th>
+                        <th>Shop Name</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Expiration Date</th>
+                        <th>Created Date</th>
+                        <th>Telegram</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var table = $('#userTable').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "ordering": false, 
+            "dom": 'rtip',
+            "paging": true,
+            "ajax": {
+                "url": "@Url.Action("All", "User")",
+                "type": "POST",
+                "data": function (d) {
+                    return {
+                        draw: d.draw,
+                        start: d.start,
+                        length: d.length,
+                        searchValue: $('#customSearch').val()
+                    };
+                },
+            },
+            "columns": [
+                { "data": "Username", "name": "Username" },
+                { "data": "ShopName", "name": "ShopName" },
+                {
+                    "data": "Role",
+                    "name": "Role",
+                    "render": function(data, type, row) {
+                        var badgeClass = data === 'ADMIN' ? 'badge-danger' : 'badge-primary';
+                        return '<span class="badge ' + badgeClass + '">' + data + '</span>';
+                    }
+                },
+                {
+                    "data": "Active",
+                    "name": "Active",
+                    "render": function(data, type, row) {
+                        return data ?
+                            '<span class="badge badge-success">Active</span>' :
+                            '<span class="badge badge-secondary">Inactive</span>';
+                    }
+                },
+                {
+                    "data": "ExpDate",
+                    "name": "ExpDate",
+                    "render": function (data, type, row) {
+                        if (data) {
+                            const dateStr = data.match(/\/Date\((\d+)\)\//)[1];
+                            const date = new Date(parseInt(dateStr));
+
+                            if (type === 'display' || type === 'filter') {
+                                return moment(date).format('DD MMM YYYY, hh:mm A');
+                            }
+                            return date.toISOString();
+                        }
+                        return '';
+                    }
+                },
+                {
+                    "data": "CreateDate",
+                    "name": "CreateDate",
+                    "render": function (data, type, row) {
+                        if (data) {
+                            const dateStr = data.match(/\/Date\((\d+)\)\//)[1];
+                            const date = new Date(parseInt(dateStr));
+
+                            if (type === 'display' || type === 'filter') {
+                                return moment(date).format('DD MMM YYYY, hh:mm A');
+                            }
+                            return date.toISOString();
+                        }
+                        return '';
+                    }
+                },
+                { "data": "TelegramId", "name": "TelegramId" },
+                {
+                    "data": null,
+                    "orderable": false,
+                    "render": function(data, type, row) {
+                        return `
+                            <div class="btn-group">
+                                <a href="/User/Edit/${row.Username}" class="btn btn-sm btn-warning">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button class="btn btn-sm btn-danger delete-btn" data-username="${row.Username}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        `;
+                    }
+                }
+            ],
+            "order": [[5, "desc"]], // Default sort by CreateDate descending
+            "responsive": true,
+            "lengthMenu": [10, 25, 50, 100],
+            "language": {
+                "emptyTable": "No users found",
+                "processing": "<i class='fas fa-spinner fa-spin'></i> Loading users..."
+            }
+        });
+
+        // Delete button handler
+        $('#userTable').on('click', '.delete-btn', function() {
+            var username = $(this).data('username');
+            if (confirm('Are you sure you want to delete ' + username + '?')) {
+                $.post('@Url.Action("Delete", "User")', { username: username })
+                    .done(function() {
+                        $('#userTable').DataTable().ajax.reload();
+                        toastr.success('User deleted successfully');
+                    })
+                    .fail(function() {
+                        toastr.error('Error deleting user');
+                    });
+            }
+        });
+
+        $('#searchButton').on('click', function () {
+            table.search($('#customSearch').val()).draw();
+        });
+
+        $('#customSearch').on('keyup', function (e) {
+            if (e.key === 'Enter') {
+                table.search($(this).val()).draw();
+            }
+        });
+
+    });
+</script>

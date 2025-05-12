@@ -8,7 +8,6 @@ using System.Web.Security;
 using System.Threading.Tasks;
 using System.Net;
 using MyDigiMenu.Attribute;
-using Microsoft.Ajax.Utilities;
 
 namespace MyDigiMenu.Controllers
 {
