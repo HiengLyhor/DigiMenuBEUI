@@ -12,18 +12,20 @@ namespace MyDigiMenu.Models
 
         public int Code { get; set; }
         public string Message { get; set; }
+        public int Id { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string ShopName { get; set; }
         public string ShopKey { get; set; }
         public DateTime? ExpDate { get; set; }
         public DateTime? CreateDate { get; set; }
-        public bool? Active{ get; set; }
+        public bool? Active { get; set; }
         public string Role { get; set; }
         public string ShopDesc { get; set; }
         public string ShopLocation { get; set; }
         public string OpenCloseTime { get; set; }
         public string ImgName { get; set; }
+        public HttpPostedFileBase NewImage { get; set; }
         public string TelegramId { get; set; }
         public string Social { get; set; }
 
@@ -123,9 +125,89 @@ namespace MyDigiMenu.Models
                 return result;
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return new StatusResponse{ Code = 500, Message = ex.Message};
+                return new StatusResponse { Code = 500, Message = ex.Message };
+            }
+        }
+
+        internal async Task<StatusResponse> DisableUser(UsernameAndRequester request, string token)
+        {
+            try
+            {
+                var url = GeneralAction.GetBaseAPIUrl() + "user/disable";
+
+                var result = await GeneralAction.PostAsync<StatusResponse>(url, request, token);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return new StatusResponse { Code = 500, Message = ex.Message };
+            }
+        }
+
+        internal async Task<StatusResponse> EnableUser(UsernameAndRequester request, string token)
+        {
+            try
+            {
+                var url = GeneralAction.GetBaseAPIUrl() + "user/enable";
+
+                var result = await GeneralAction.PostAsync<StatusResponse>(url, request, token);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return new StatusResponse { Code = 500, Message = ex.Message };
+            }
+        }
+        internal async Task<StatusResponse> DeleteUser(UsernameAndRequester request, string token)
+        {
+            try
+            {
+                var url = GeneralAction.GetBaseAPIUrl() + "user/delete";
+
+                var result = await GeneralAction.PostAsync<StatusResponse>(url, request, token);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return new StatusResponse { Code = 500, Message = ex.Message };
+            }
+        }
+        internal async Task<User> UpdateUser(UpdateUserRequest request, string token)
+        {
+            try
+            {
+
+                // Logic for new user update
+
+                var url = GeneralAction.GetBaseAPIUrl() + "user/update";
+
+                var result = await GeneralAction.PostAsync<User>(url, request, token);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return new User { Code = 500, Message = ex.Message };
+            }
+        }
+
+        internal async Task<User> ViewUserDetail(string username, string token)
+        {   
+            try
+            {
+                var url = GeneralAction.GetBaseAPIUrl() + "user/" + username;
+                var result = await GeneralAction.GetAsync<User>(url, token);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return new User { Code = 500, Message = ex.Message };
             }
         }
     }
@@ -151,6 +233,12 @@ namespace MyDigiMenu.Models
         public AllUserResponse() { }
     }
 
+    public class UsernameAndRequester
+    {
+        public string Username { get; set; }
+        public string Requester { get; set; }
+    }
+
     public class UserInfoRequestToAPI
     {
         public string SpecialKey { get; set; }
@@ -163,6 +251,20 @@ namespace MyDigiMenu.Models
         public string OpenCloseTime { get; set; }
         public HttpPostedFileBase ImgUpload { get; set; }
         public string ShopImg { get; set; }
+        public string TelegramId { get; set; }
+        public string Social { get; set; }
+    }
+
+    public class UpdateUserRequest
+    {
+        public string Performer { get; set; }
+        public string Username { get; set; }
+        public string ShopName { get; set; }
+        public string ShopDesc { get; set; }
+        public string ShopLocation { get; set; }
+        public string OpenCloseTime { get; set; }
+        public string ImgName { get; set; }
+        public string ImgData { get; set; }
         public string TelegramId { get; set; }
         public string Social { get; set; }
     }

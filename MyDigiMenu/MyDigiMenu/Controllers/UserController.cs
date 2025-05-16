@@ -67,7 +67,7 @@ namespace MyDigiMenu.Controllers
         }
 
         [HttpGet]
-        public ActionResult ViewUser(string username)
+        public async Task<ActionResult> ViewUser(string username)
         {
 
             bool selfView = Session["Super"].ToString().Equals("USER") && Session["User"].ToString().Equals(username);
@@ -75,31 +75,73 @@ namespace MyDigiMenu.Controllers
 
             if (selfView || adminView)
             {
-                // Get data to show in interface
-                return View();
-            }
-            return RedirectToAction("/");
-
-        }
-
-        [HttpGet]
-        public ActionResult Edit(string username)
-        {
-
-            bool selfView = Session["Super"].ToString().Equals("USER") && Session["User"].ToString().Equals(username);
-            bool adminView = Session["Super"].ToString().Equals("ADMIN");
-
-            if (selfView || adminView)
-            {
-                // Get data to show in interface
-                return View();
+                User userinfo = await new User().ViewUserDetail(username, Session["Token"]?.ToString());
+                return View(userinfo);
             }
             return RedirectToAction("/");
 
         }
 
         [HttpPost]
-        public ActionResult Edit(UserInfoRequestToAPI user)
+        public async Task<JsonResult> Active(string username)
+        {
+            UsernameAndRequester usernameAndRequester = new UsernameAndRequester
+            {
+                Username = username,
+                Requester = Session["User"]?.ToString()
+            };
+
+            StatusResponse result = await new User().DisableUser(usernameAndRequester, Session["Token"]?.ToString());
+
+            if (result.Code != (int)HttpStatusCode.OK)
+            {
+                string stuats = "inactive";
+                return Json(new { success = false, message = result.Message, status = stuats });
+            }
+
+            string status = "active";
+            return Json(new { success = true, status = status });
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> Inactive(string username)
+        {
+            UsernameAndRequester usernameAndRequester = new UsernameAndRequester
+            {
+                Username = username,
+                Requester = Session["User"]?.ToString()
+            };
+
+            StatusResponse result = await new User().EnableUser(usernameAndRequester, Session["Token"]?.ToString());
+
+            if (result.Code != (int)HttpStatusCode.OK)
+            {
+                string stuats = "active";
+                return Json(new { success = false, message = result.Message, status = stuats });
+            }
+
+            string status = "inactive";
+            return Json(new { success = true, status = status });
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Edit(string username)
+        {
+
+            bool selfView = Session["Super"].ToString().Equals("USER") && Session["User"].ToString().Equals(username);
+            bool adminView = Session["Super"].ToString().Equals("ADMIN");
+
+            if (selfView || adminView)
+            {
+                User userInfo = await new User().ViewUserDetail(username, Session["Token"]?.ToString());
+                return View(userInfo);
+            }
+            return RedirectToAction("/");
+
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Edit(User user)
         {
 
             bool selfView = Session["Super"].ToString().Equals("USER") && Session["User"].ToString().Equals(user.Username);
@@ -107,25 +149,70 @@ namespace MyDigiMenu.Controllers
 
             if (selfView || adminView)
             {
-                // Post method to edit user info
-                return View();
+                UpdateUserRequest request = new UpdateUserRequest
+                {
+                    Performer = Session["User"]?.ToString(),
+                    Username = user.Username,
+                    ShopName = user.ShopName,
+                    ShopDesc = user.ShopDesc,
+                    ShopLocation = user.ShopLocation,
+                    OpenCloseTime = user.OpenCloseTime,
+                    TelegramId = user.TelegramId,
+                    Social = user.Social,
+
+                };
+
+                if (user.NewImage != null && user.NewImage.ContentType == "image/png")
+                {
+                    var compressedBase64 = GeneralAction.CompressAndConvertToBase64(user.NewImage);
+                    request.ImgName = null;
+                    request.ImgData = compressedBase64;
+                }
+
+                User result = await user.UpdateUser(request, Session["Token"]?.ToString());
+
+                if (result.Code == (int)HttpStatusCode.OK)
+                {
+                    TempData["SuccessMessage"] = "User updated successfully!";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = result.Message;
+                }
+
+                return View("All");
             }
             return RedirectToAction("/");
 
         }
 
         [HttpPost]
-        public ActionResult Delete(string username)
+        public async Task<ActionResult> Delete(string username)
         {
             bool admin = Session["Super"].ToString().Equals("ADMIN");
 
             if (admin)
             {
-                // Perform call API to delete record
-                return View();
+                UsernameAndRequester usernameAndRequester = new UsernameAndRequester
+                {
+                    Username = username,
+                    Requester = Session["User"]?.ToString()
+                };
+                StatusResponse result = await new User().DeleteUser(usernameAndRequester, Session["Token"]?.ToString());
+
+                if (result.Code == (int)HttpStatusCode.OK)
+                {
+                    TempData["SuccessMessage"] = "User created successfully!";
+
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = result.Message;
+                }
+
+                return RedirectToAction("All");
             }
             return RedirectToAction("/");
-
         }
 
         [HttpGet]

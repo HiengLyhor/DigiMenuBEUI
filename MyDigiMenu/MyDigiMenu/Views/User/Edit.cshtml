@@ -1,0 +1,116 @@
+﻿@model MyDigiMenu.Models.User
+
+@{
+    ViewBag.Title = "Edit User";
+}
+
+<h2>Edit User</h2>
+
+<div>
+    <h4>User Details</h4>
+    <hr />
+    @using (Html.BeginForm("Edit", "User", FormMethod.Post, new { @class = "form-horizontal", id = "editForm", enctype = "multipart/form-data" }))
+    {
+        @Html.HiddenFor(model => model.Username) <!-- Hidden field for Username -->
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ShopName, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.ShopName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ShopName)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ShopKey, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.ShopKey, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ShopKey)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ExpDate, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.ExpDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                @Html.ValidationMessageFor(model => model.ExpDate)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Role, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Role, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Role)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ShopDesc, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.ShopDesc, new { @class = "form-control", rows = 3 })
+                @Html.ValidationMessageFor(model => model.ShopDesc)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ShopLocation, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.ShopLocation, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ShopLocation)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.OpenCloseTime, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.OpenCloseTime, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.OpenCloseTime)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ImgName, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <img src="@Url.Content("https://digital-menu-api-v2.onrender.com/v1/img/" + Model.ImgName)" alt="User Image" style="max-width: 150px;" />
+                @Html.TextBoxFor(model => model.ImgName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ImgName)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                @Html.LabelFor(model => model.NewImage)
+                @Html.TextBoxFor(model => model.NewImage, new
+                {
+                    @class = "form-control",
+                    type = "file",
+                    accept = "image/png"
+                })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TelegramId, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.TelegramId, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.TelegramId)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Social, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Social, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Social)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                @Html.ActionLink("Cancel", "All", null, new { @class = "btn btn-secondary" })
+            </div>
+        </div>
+    }
+</div>

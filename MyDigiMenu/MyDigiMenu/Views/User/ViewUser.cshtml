@@ -1,0 +1,81 @@
+﻿@model MyDigiMenu.Models.User
+
+@{
+    ViewBag.Title = "View User";
+}
+
+<div>
+    <h4>User Details</h4>
+    <hr />
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Username)</th>
+                <td>@Html.DisplayFor(model => model.Username)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.ShopName)</th>
+                <td>@Html.DisplayFor(model => model.ShopName)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.ShopKey)</th>
+                <td>@Html.DisplayFor(model => model.ShopKey)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.ExpDate)</th>
+                <td>@Html.DisplayFor(model => model.ExpDate)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.CreateDate)</th>
+                <td>@Html.DisplayFor(model => model.CreateDate)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Active)</th>
+                <td>
+                    @{
+                        var activeStatus = (bool)Model.Active ? "Active" : "Inactive";
+                        var badgeClass = (bool)Model.Active ? "badge-success" : "badge-secondary";
+                    }
+                    <span class="badge @badgeClass">@activeStatus</span>
+                </td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Role)</th>
+                <td>@Html.DisplayFor(model => model.Role)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.ShopDesc)</th>
+                <td>@Html.DisplayFor(model => model.ShopDesc)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.ShopLocation)</th>
+                <td>@Html.DisplayFor(model => model.ShopLocation)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.OpenCloseTime)</th>
+                <td>@Html.DisplayFor(model => model.OpenCloseTime)</td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.ImgName)</th>
+                <td>
+                    <img src="@Url.Content("https://digital-menu-api-v2.onrender.com/v1/img/" + Model.ImgName)" alt="User Image" style="max-width: 150px;" />
+                </td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.TelegramId)</th>
+                <td>
+                    <a href="#@Model.TelegramId" target="_blank">@Model.TelegramId</a>
+                </td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Social)</th>
+                <td>@Html.DisplayFor(model => model.Social)</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<p>
+    <a class="btn btn-primary" href="@Url.Action("Edit", new { username = Model.Username })">Edit</a>
+    <a class="btn btn-secondary" href="@Url.Action("All")">Back to List</a>
+</p>

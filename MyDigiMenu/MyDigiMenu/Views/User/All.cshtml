@@ -99,8 +99,8 @@
                     "name": "Active",
                     "render": function(data, type, row) {
                         return data ?
-                            '<span class="badge badge-success">Active</span>' :
-                            '<span class="badge badge-secondary">Inactive</span>';
+                            `<a href="#" id="status-${row.Username}" class="badge badge-success" onclick="updateStatus('${row.Username}', 'Inactive')">Active</a>` :
+                            `<a href="#" id="status-${row.Username}" class="badge badge-secondary" onclick="updateStatus('${row.Username}', 'Active')">Inactive</a>`;
                     }
                 },
                 {
@@ -142,8 +142,11 @@
                     "render": function(data, type, row) {
                         return `
                             <div class="btn-group">
-                                <a href="/User/Edit/${row.Username}" class="btn btn-sm btn-warning">
+                                <a href="/User/Edit?username=${row.Username}" class="btn btn-sm btn-warning">
                                     <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="/User/ViewUser?username=${row.Username}" class="btn btn-sm btn-info">
+                                    <i class="fas fa-eye"></i>
                                 </a>
                                 <button class="btn btn-sm btn-danger delete-btn" data-username="${row.Username}">
                                     <i class="fas fa-trash"></i>
@@ -188,4 +191,34 @@
         });
 
     });
+
+    function updateStatus(username, status) {
+        console.log(username + " " + status);
+        fetch('/User/' + status, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username: username }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const newStatus = data.status === 'active' ?
+                    `<a href="#" id="status-${username}" class="badge badge-success" onclick="updateStatus('${username}', 'Inactive')">Active</a>` :
+                    `<a href="#" id="status-${username}" class="badge badge-secondary" onclick="updateStatus('${username}', 'Active')">Inactive</a>`;
+
+                const statusElement = document.getElementById(`status-${username}`);
+                const newElement = document.createElement('div');
+
+                newElement.innerHTML = newStatus;
+                statusElement.parentNode.replaceChild(newElement.firstChild, statusElement);
+            } else {
+                alert('Failed to update status, error: ' + data.message);
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
 </script>
