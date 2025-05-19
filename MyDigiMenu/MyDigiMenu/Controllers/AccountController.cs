@@ -211,6 +211,7 @@ namespace MyDigiMenu.Controllers
                 Session["ShopName"] = loginResponse.ShopName;
                 Session["ProfilePicture"] = loginResponse.ImgUrl;
                 Session["TokenExp"] = loginResponse.TokenExp;
+                Session["ShopKey"] = loginResponse.ShopKey;
 
                 string userData = JsonConvert.SerializeObject(login);
                 FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(

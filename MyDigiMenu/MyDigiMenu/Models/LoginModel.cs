@@ -43,7 +43,7 @@ namespace MyDigiMenu.Models
 						return new LoginResponse { Code = (int)HttpStatusCode.InternalServerError, Message = "Invalid username or password." };
                     }
                     await GeneralAction.SendMessageAsync("#LoginModel_Error\n#Error: " + loginResponse.Message + "\nError At: (UTC) " + DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"));
-                    return new LoginResponse { Code = (int)HttpStatusCode.InternalServerError, Message = "Error occurred during login." };
+                    return new LoginResponse { Code = (int)HttpStatusCode.InternalServerError, Message = loginResponse.Message };
                 }
 
 				loginResponse.Token = Encryption.Decrypt(loginResponse.Token); // Will catch if no token provided
@@ -67,6 +67,8 @@ namespace MyDigiMenu.Models
 		public string Message { get; set; }
 
 		public string Username {  set; get; }
+
+		public string ShopKey { get; set; }
 
 		public DateTime? CreateDate { get; set; }
 

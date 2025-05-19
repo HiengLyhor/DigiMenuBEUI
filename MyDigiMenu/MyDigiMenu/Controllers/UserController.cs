@@ -91,7 +91,7 @@ namespace MyDigiMenu.Controllers
                 Requester = Session["User"]?.ToString()
             };
 
-            StatusResponse result = await new User().DisableUser(usernameAndRequester, Session["Token"]?.ToString());
+            StatusResponse result = await new User().EnableUser(usernameAndRequester, Session["Token"]?.ToString());
 
             if (result.Code != (int)HttpStatusCode.OK)
             {
@@ -112,7 +112,7 @@ namespace MyDigiMenu.Controllers
                 Requester = Session["User"]?.ToString()
             };
 
-            StatusResponse result = await new User().EnableUser(usernameAndRequester, Session["Token"]?.ToString());
+            StatusResponse result = await new User().DisableUser(usernameAndRequester, Session["Token"]?.ToString());
 
             if (result.Code != (int)HttpStatusCode.OK)
             {
@@ -165,11 +165,15 @@ namespace MyDigiMenu.Controllers
                 if (user.NewImage != null && user.NewImage.ContentType == "image/png")
                 {
                     var compressedBase64 = GeneralAction.CompressAndConvertToBase64(user.NewImage);
-                    request.ImgName = null;
+                    request.ImgName = "CHANGED";
                     request.ImgData = compressedBase64;
                 }
+                else
+                {
+                    request.ImgName = user.ImgName;
+                }
 
-                User result = await user.UpdateUser(request, Session["Token"]?.ToString());
+                 User result = await user.UpdateUser(request, Session["Token"]?.ToString());
 
                 if (result.Code == (int)HttpStatusCode.OK)
                 {
