@@ -151,6 +151,12 @@
                                 <button class="btn btn-sm btn-danger delete-btn" data-username="${row.Username}">
                                     <i class="fas fa-trash"></i>
                                 </button>
+                                ${row.Role === 'USER' ? 
+                                    `<a href="/Recipe/All?ShopKey=${row.ShopKey}" class="btn btn-sm btn-success">
+                                        <i class="fas fa-utensils"></i>
+                                    </a>` 
+                                : ''
+                                }
                             </div>
                         `;
                     }

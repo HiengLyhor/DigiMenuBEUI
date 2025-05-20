@@ -12,7 +12,7 @@ namespace MyDigiMenu.Controllers
         [HttpGet]
         public ActionResult All(string shopKey)
         {
-            if (Session["Super"].ToString().Equals("ADMIN"))
+            if (Session["Super"].ToString().Equals("ADMIN") && shopKey != null)
             {
                 Session["ShopKey"] = shopKey;
             }
@@ -24,7 +24,7 @@ namespace MyDigiMenu.Controllers
         {
             try
             {
-                
+
                 // Get data from service
                 Recipe recipe = new Recipe();
                 var apiResponse = await recipe.GetRecipeList(
