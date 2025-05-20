@@ -10,8 +10,12 @@ namespace MyDigiMenu.Controllers
     public class RecipeController : Controller
     {
         [HttpGet]
-        public ActionResult All()
+        public ActionResult All(string shopKey)
         {
+            if (Session["Super"].ToString().Equals("ADMIN"))
+            {
+                Session["ShopKey"] = shopKey;
+            }
             return View();
         }
 
@@ -199,7 +203,7 @@ namespace MyDigiMenu.Controllers
                 request.ImgUpload = null; // Set because when post to API error
             }
             
-            SingleRecipeResponse result = await new Recipe().UpdateRecipe(request, Session["Token"]?.ToString());
+            StatusResponse result = await new Recipe().UpdateRecipe(request, Session["Token"]?.ToString());
 
             if (result.Code == (int)HttpStatusCode.OK)
             {

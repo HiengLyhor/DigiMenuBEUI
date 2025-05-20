@@ -23,12 +23,12 @@ namespace MyDigiMenu.Models
             }
         }
 
-        public async Task<SingleRecipeResponse> UpdateRecipe(UpdateRecipeRequest recipeRequest, string token) 
+        public async Task<StatusResponse> UpdateRecipe(UpdateRecipeRequest recipeRequest, string token) 
         {
             try
             {
                 var url = GeneralAction.GetBaseAPIUrl() + "recipe/update";
-                var result = await GeneralAction.PostAsync<SingleRecipeResponse>(url, recipeRequest, token);
+                var result = await GeneralAction.PostAsync<StatusResponse>(url, recipeRequest, token);
                 return result;
             }
             catch (Exception ex)
