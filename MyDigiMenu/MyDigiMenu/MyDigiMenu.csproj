@@ -206,10 +206,10 @@
     <Content Include="Views\User\Create.cshtml" />
     <Content Include="Views\User\ViewUser.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
+    <Content Include="Views\Recipe\All.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Recipe\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

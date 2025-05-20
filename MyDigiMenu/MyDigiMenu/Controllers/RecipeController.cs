@@ -3,6 +3,7 @@ using System.Data;
 using System.Threading.Tasks;
 using System;
 using System.Web.Mvc;
+using System.Net;
 
 namespace MyDigiMenu.Controllers
 {
@@ -25,8 +26,7 @@ namespace MyDigiMenu.Controllers
                 var apiResponse = await recipe.GetRecipeList(
                     Session["ShopKey"]?.ToString(),
                     searchValue,
-                    Session["Token"]?.ToString(),
-                    Session["User"]?.ToString()
+                    Session["Token"]?.ToString()
                 );
 
                 if (apiResponse.Code != 200)
@@ -38,8 +38,7 @@ namespace MyDigiMenu.Controllers
                     }, JsonRequestBehavior.AllowGet);
                 }
 
-                //DataSet ds = user.ConvertAllUserResponseToDataSet(apiResponse);
-                DataSet ds = null;
+                DataSet ds = recipe.ConvertAllRecipeResponseToDataSet(apiResponse);
 
                 // Prepare response
                 var response = new
@@ -61,5 +60,75 @@ namespace MyDigiMenu.Controllers
                 }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        [HttpPost]
+        public async Task<JsonResult> Active(int id)
+        {
+            ShopKeyAndRequeseter shopKeyAndRequeseter = new ShopKeyAndRequeseter
+            {
+                RecipeId = id,
+                ShopKey = Session["ShopKey"].ToString(),
+                Requester = Session["User"]?.ToString()
+            };
+
+            StatusResponse result = await new Recipe().EnableRecipe(shopKeyAndRequeseter, Session["Token"]?.ToString());
+
+            if (result.Code != (int)HttpStatusCode.OK)
+            {
+                string stuats = "inactive";
+                return Json(new { success = false, message = result.Message, status = stuats });
+            }
+
+            string status = "active";
+            return Json(new { success = true, status = status });
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> Inactive(int id)
+        {
+            ShopKeyAndRequeseter shopKeyAndRequeseter = new ShopKeyAndRequeseter
+            {
+                RecipeId = id,
+                ShopKey = Session["ShopKey"].ToString(),
+                Requester = Session["User"]?.ToString()
+            };
+
+            StatusResponse result = await new Recipe().DisableRecipe(shopKeyAndRequeseter, Session["Token"]?.ToString());
+
+            if (result.Code != (int)HttpStatusCode.OK)
+            {
+                string stuats = "active";
+                return Json(new { success = false, message = result.Message, status = stuats });
+            }
+
+            string status = "inactive";
+            return Json(new { success = true, status = status });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Delete(int id)
+        {
+            ShopKeyAndRequeseter shopKeyAndRequeseter = new ShopKeyAndRequeseter
+            {
+                RecipeId = id,
+                ShopKey = Session["ShopKey"].ToString(),
+                Requester = Session["User"]?.ToString()
+            };
+            StatusResponse result = await new Recipe().DeleteRecipe(shopKeyAndRequeseter, Session["Token"]?.ToString());
+
+            if (result.Code == (int)HttpStatusCode.OK)
+            {
+                TempData["SuccessMessage"] = "User created successfully!";
+
+            }
+            else
+            {
+                TempData["ErrorMessage"] = result.Message;
+            }
+
+            return RedirectToAction("All");
+            
+        }
+
     }
 }
