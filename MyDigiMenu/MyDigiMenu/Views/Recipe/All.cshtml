@@ -92,10 +92,18 @@
                     "render": function (data, type, row) {
                         const discount = row.Discount;
                         const discountedPrice = data - (data * (discount / 100));
+
+                        if (discount == 0) {
+                            return `
+                                <div>
+                                    <span style="font-weight: bold; color: green;"> $${discountedPrice.toFixed(2)}</span>
+                                </div>
+                            `;
+                        }
                         return `
                             <div>
-                                <span style="text-decoration: line-through;">$${data.toFixed(2)}</span>
-                                <span style="font-weight: bold; color: red;"> $${discountedPrice.toFixed(2)}</span>
+                                <span style="text-decoration: line-through; color: red;">$${data.toFixed(2)}</span>
+                                <span style="font-weight: bold; color: green;"> $${discountedPrice.toFixed(2)}</span>
                             </div>
                         `;
                     }
@@ -106,10 +114,18 @@
                     "render": function (data, type, row) {
                         const discount = row.Discount;
                         const discountedPrice = data - (data * (discount / 100));
+
+                        if (discount == 0) {
+                            return `
+                                <div>
+                                    <span style="font-weight: bold; color: green;"> ៛${discountedPrice.toFixed(0)}</span>
+                                </div>
+                            `;
+                        }
                         return `
                             <div>
-                                <span style="text-decoration: line-through;">៛${data.toFixed(0)}</span>
-                                <span style="font-weight: bold; color: red;"> ៛${discountedPrice.toFixed(0)}</span>
+                                <span style="text-decoration: line-through; color: red;">៛${data.toFixed(0)}</span>
+                                <span style="font-weight: bold; color: green;"> ៛${discountedPrice.toFixed(0)}</span>
                             </div>
                         `;
                     }
@@ -139,7 +155,7 @@
                     "render": function(data, type, row) {
                         return `
                             <div class="btn-group">
-                                <a href="/Recipe/Edit?id=${row.Id}" class="btn btn-sm btn-warning">
+                                <a href="/Recipe/Update?id=${row.Id}" class="btn btn-sm btn-warning">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <a href="/Recipe/View?id=${row.Id}" class="btn btn-sm btn-info">

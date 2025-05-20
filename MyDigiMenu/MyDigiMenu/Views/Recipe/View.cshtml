@@ -1,0 +1,38 @@
+﻿@model MyDigiMenu.Models.SingleRecipeResponse
+@{
+    ViewData["Title"] = "Recipe Details";
+}
+
+<h2 class="text-center mb-4">Recipe Details</h2>
+<div>
+    <button class="btn btn-secondary" onclick="window.history.back();"> Go Back</button>
+</div>
+
+<div class="card mt-3">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Name</h5>
+        <img src="@Url.Content("https://digital-menu-api-v2.onrender.com/v1/img/" + Model.ImgName)" alt="@Model.Name" class="img-fluid mb-3" />
+
+        <p class="card-text"><strong>Description:</strong> @Model.Description</p>
+
+        <p class="card-text"><strong>Price (USD):</strong> $@Model.PriceUsd</p>
+        <p class="card-text"><strong>Price (KHR):</strong> ₭@Model.PriceKhr</p>
+
+        <p class="card-text"><strong>Discount:</strong> @Model.Discount%</p>
+        <p class="card-text"><strong>Category:</strong> @Model.Category</p>
+
+        <p class="card-text">
+            <strong>Status:</strong>
+            @if (Model.Active)
+            {
+                <span class="badge badge-success">Active</span>
+            }
+            else
+            {
+                <span class="badge badge-secondary">Inactive</span>
+            }
+        </p>
+
+        <p class="card-text"><strong>Tags:</strong> @string.Join(", ", Model.Tag)</p>
+    </div>
+</div>

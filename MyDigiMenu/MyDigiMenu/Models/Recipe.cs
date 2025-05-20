@@ -2,33 +2,38 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace MyDigiMenu.Models
 {
     public class Recipe
     {
 
-        public async Task<SingleRecipeResponse> CreateRecipe(CreateRecipeRequest recipeRequest)
+        public async Task<SingleRecipeResponse> CreateRecipe(CreateRecipeRequest recipeRequest, string token)
         {
             try
             {
-                return null;
+                var url = GeneralAction.GetBaseAPIUrl() + "recipe/create";
+                var result = await GeneralAction.PostAsync<SingleRecipeResponse>(url, recipeRequest, token);
+                return result;
             }
             catch(Exception ex)
             {
-                return null;
+                return new SingleRecipeResponse { Code = 500, Message = ex.Message };
             }
         }
 
-        public async Task<SingleRecipeResponse> UpdateRecipe(UpdateRecipeRequest recipeRequest) 
+        public async Task<SingleRecipeResponse> UpdateRecipe(UpdateRecipeRequest recipeRequest, string token) 
         {
             try
             {
-                return null;
+                var url = GeneralAction.GetBaseAPIUrl() + "recipe/update";
+                var result = await GeneralAction.PostAsync<SingleRecipeResponse>(url, recipeRequest, token);
+                return result;
             }
             catch (Exception ex)
             {
-                return null;
+                return new SingleRecipeResponse { Code = 500, Message = ex.Message };
             }
         }
 
@@ -90,19 +95,21 @@ namespace MyDigiMenu.Models
             }
             catch (Exception ex)
             {
-                return null;
+                return new RecipeListResponse { Code = 500, Message = ex.Message };
             }
         }
 
-        public SingleRecipeResponse GetSingleRecipe(int id)
+        public async Task<SingleRecipeResponse> GetSingleRecipe(int id)
         {
             try
             {
-                return null;
+                var url = GeneralAction.GetBaseAPIUrl() + "recipe/view/" + id;
+                var result = await GeneralAction.GetAsync<SingleRecipeResponse>(url, null);
+                return result;
             }
             catch (Exception ex)
             {
-                return null;
+                return new SingleRecipeResponse { Code = 500, Message = ex.Message };
             }
         }
 
@@ -161,6 +168,7 @@ namespace MyDigiMenu.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public string ImgData { get; set; }
+        public HttpPostedFileBase ImgUpload { get; set; }
         public double PriceUsd { get; set; }
         public double PriceKhr { get; set; }
         public int Discount { get; set; }
@@ -170,8 +178,9 @@ namespace MyDigiMenu.Models
     }
     public class UpdateRecipeRequest : CreateRecipeRequest
     {
-        int Id { get; set; }
+        public int? Id { get; set; }
         public string ImgName { get; set; }
+        public string Tag { get; set; }
     }
     public class ShopKeyAndRequeseter
     {
@@ -189,6 +198,7 @@ namespace MyDigiMenu.Models
         public double PriceKhr { get; set; }
         public int Discount { get; set; }
         public string ImgName { get; set; }
+        public HttpPostedFileBase ImgUpload { get; set; }
         public List<string> Tag { get; set; }
         public string Category { get; set; }
         public bool Active { get; set; }

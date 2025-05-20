@@ -130,5 +130,95 @@ namespace MyDigiMenu.Controllers
             
         }
 
+        [HttpGet]
+        public ActionResult Create()
+        {
+            return View(new CreateRecipeRequest());
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateRecipe(CreateRecipeRequest request)
+        {
+            if (ModelState.IsValid)
+            {
+
+                try
+                {
+
+                    // Perform action create new recipe
+                    if (request.ImgUpload != null && request.ImgUpload.ContentType == "image/png")
+                    {
+                        var compressedBase64 = GeneralAction.CompressAndConvertToBase64(request.ImgUpload);
+                        request.ImgData = compressedBase64;
+                        request.ImgUpload = null;
+                    }
+
+                    request.Username = Session["User"]?.ToString();
+                    // Post API
+                    StatusResponse result = await new Recipe().CreateRecipe(request, Session["Token"]?.ToString());
+
+                    if (result.Code == (int)HttpStatusCode.OK)
+                    {
+                        TempData["SuccessMessage"] = "Recipe created successfully!";
+
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = result.Message;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    GeneralAction.SendMessageAsync("POST UserController.Create " + ex.Message).Wait();
+                    TempData["ErrorMessage"] = ex.Message;
+                }
+
+            }
+
+            return RedirectPermanent("All");
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Update(int id)
+        {
+            SingleRecipeResponse singleRecipe = await new Recipe().GetSingleRecipe(id);
+            return View(singleRecipe);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Update(UpdateRecipeRequest request)
+        {
+            request.Tags = request.Tag;
+            request.Username = Session["User"]?.ToString();
+
+            if (request.ImgUpload != null && request.ImgUpload.ContentType == "image/png")
+            {
+                var compressedBase64 = GeneralAction.CompressAndConvertToBase64(request.ImgUpload);
+                request.ImgName = "CHANGED";
+                request.ImgData = compressedBase64;
+                request.ImgUpload = null; // Set because when post to API error
+            }
+            
+            SingleRecipeResponse result = await new Recipe().UpdateRecipe(request, Session["Token"]?.ToString());
+
+            if (result.Code == (int)HttpStatusCode.OK)
+            {
+                TempData["SuccessMessage"] = "Recipe updated successfully!";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = result.Message;
+            }
+
+            return RedirectPermanent("All");
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> View(int id)
+        {
+            SingleRecipeResponse singleRecipe = await new Recipe().GetSingleRecipe(id);
+            return View(singleRecipe);
+        }
+
     }
 }

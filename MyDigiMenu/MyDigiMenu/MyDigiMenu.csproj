@@ -207,6 +207,9 @@
     <Content Include="Views\User\ViewUser.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
     <Content Include="Views\Recipe\All.cshtml" />
+    <Content Include="Views\Recipe\Create.cshtml" />
+    <Content Include="Views\Recipe\Update.cshtml" />
+    <Content Include="Views\Recipe\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,96 @@
+﻿@model MyDigiMenu.Models.CreateRecipeRequest
+@{
+    ViewData["Title"] = "Create Recipe";
+}
+
+<h2 class="text-center mb-4">Create Recipe Form</h2>
+<div>
+    <button class="btn btn-secondary" onclick="window.history.back();"> Go Back</button>
+</div>
+
+<div class="card mt-3">
+    <div class="card-body">
+        @using (Html.BeginForm("CreateRecipe", "Recipe", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="form-group col-md-4">
+                @Html.LabelFor(model => model.Name, new { @class = "font-weight-bold" })
+                @Html.TextBoxFor(model => model.Name, new { @class = "form-control", required = "required", placeholder = "Enter recipe name" })
+            </div>
+
+            <div class="form-group col-md-4">
+                @Html.LabelFor(model => model.Description, new { @class = "font-weight-bold" })
+                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = 4, required = "required", placeholder = "Enter recipe description" })
+            </div>
+
+            <div class="form-group col-md-4">
+                @Html.LabelFor(model => model.ImgUpload, new { @class = "font-weight-bold" })
+                @Html.TextBoxFor(model => model.ImgUpload, new
+                {
+                    @class = "form-control-file",
+                    type = "file",
+                    accept = "image/png"
+                })
+            </div>
+
+            <div class="form-group col-md-4">
+                @Html.LabelFor(model => model.PriceUsd, new { @class = "font-weight-bold" })
+                @Html.TextBoxFor(model => model.PriceUsd, new { @class = "form-control", type = "number", step = "0.01", id = "PriceUsd", required = "required", placeholder = "Price in USD" })
+            </div>
+
+            <div class="form-group col-md-4">
+                @Html.LabelFor(model => model.PriceKhr, new { @class = "font-weight-bold" })
+                @Html.TextBoxFor(model => model.PriceKhr, new { @class = "form-control", type = "number", step = "100", id = "PriceKhr", required = "required", placeholder = "Price in KHR" })
+            </div>
+
+            <div class="form-group col-md-4">
+                @Html.LabelFor(model => model.Discount, new { @class = "font-weight-bold" })
+                @Html.TextBoxFor(model => model.Discount, new { @class = "form-control", type = "number", min = "0", max = "100", required = "required", placeholder = "Discount percentage" })
+            </div>
+
+            <div class="form-group  col-md-4">
+                @Html.LabelFor(model => model.Tags, new { @class = "font-weight-bold" })
+                @Html.TextBoxFor(model => model.Tags, new { @class = "form-control", placeholder = "Comma-separated tags" })
+            </div>
+
+            <div class="form-group  col-md-4">
+                @Html.LabelFor(model => model.Category, new { @class = "font-weight-bold" })
+                @Html.TextBoxFor(model => model.Category, new { @class = "form-control", required = "required", placeholder = "Enter category" })
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        }
+    </div>
+</div>
+<script>
+    const exchangeRate = 4000;
+
+    $(document).ready(function () {
+        // Handle input for USD
+        $('#PriceUsd').on('input', function () {
+            const usdValue = parseFloat($(this).val());
+            if (!isNaN(usdValue)) {
+                $('#PriceKhr').val((usdValue * exchangeRate).toFixed(2));
+                $('#PriceKhr').prop('readonly', true);  // Changed to readonly
+                $('#PriceUsd').prop('readonly', false);  // Ensure USD is editable
+            } else {
+                $('#PriceKhr').prop('readonly', false);
+            }
+        });
+
+        // Handle input for KHR
+        $('#PriceKhr').on('input', function () {
+            const khrValue = parseFloat($(this).val());
+            if (!isNaN(khrValue)) {
+                $('#PriceUsd').val((khrValue / exchangeRate).toFixed(2));
+                $('#PriceUsd').prop('readonly', true);  // Changed to readonly
+                $('#PriceKhr').prop('readonly', false); // Ensure KHR is editable
+            } else {
+                $('#PriceUsd').prop('readonly', false);
+            }
+        });
+
+        // Set both to readonly false initially
+        $('#PriceUsd').prop('readonly', false);
+        $('#PriceKhr').prop('readonly', false);
+    });
+</script>
