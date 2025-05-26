@@ -218,7 +218,7 @@ namespace MyDigiMenu.Controllers
                 1,
                 login.Username,
                 DateTime.Now,
-                DateTime.Now.AddMinutes(9),
+                DateTime.Now.AddDays(1),
                 false, //pass here true, if you want to implement remember me functionality
                 userData);
 
